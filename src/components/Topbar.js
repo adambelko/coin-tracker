@@ -3,11 +3,9 @@ import styled from "styled-components";
 const StyledTopbar = styled.div`
     display: flex;
     justify-content: space-between;
-    width: 100%;
     font-size: 0.8rem;
     width: 85%;
     margin: auto;
-    padding: 1.5em 0;
 `;
 
 const StyledLeftWrapper = styled.div`
@@ -23,17 +21,18 @@ const StyledRightWrapper = styled.div`
 const StyledElement = styled.div`
     display: flex;
     color: #6b7280;
+    cursor: ${(props) => (props.pointer ? "pointer" : "auto")};
 `;
 
 const StyledValue = styled.div`
     color: #4789f7;
+    cursor: pointer;
 `;
 
 const Topbar = () => {
     return (
         <StyledTopbar>
             <StyledLeftWrapper>
-                <StyledLeftWrapper></StyledLeftWrapper>
                 <StyledElement>
                     Coins:<StyledValue>&nbsp;1010</StyledValue>
                 </StyledElement>
@@ -54,8 +53,8 @@ const Topbar = () => {
                 </StyledElement>
             </StyledLeftWrapper>
             <StyledRightWrapper>
-                <StyledElement>USD</StyledElement>
-                <StyledElement>Mode</StyledElement>
+                <StyledElement pointer>USD</StyledElement>
+                <StyledElement pointer>Mode</StyledElement>
             </StyledRightWrapper>
         </StyledTopbar>
     );
