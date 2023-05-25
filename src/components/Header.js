@@ -1,8 +1,8 @@
-import React from "react";
 import styled from "styled-components";
 
 import Topbar from "./Topbar";
 import Navigation from "./Navigation";
+import MobileNavigation from "./Navbar/MobileNavigation";
 
 const StyledHeader = styled.header`
     display: flex;
@@ -16,16 +16,15 @@ const StyledWrapper = styled.div`
 
 const Header = () => {
     return (
-        <React.Fragment>
-            <StyledHeader>
-                <StyledWrapper>
-                    <Topbar />
-                </StyledWrapper>
-                <StyledWrapper>
-                    <Navigation />
-                </StyledWrapper>
-            </StyledHeader>
-        </React.Fragment>
+        <StyledHeader>
+            <StyledWrapper>
+                <Topbar />
+            </StyledWrapper>
+            <StyledWrapper>
+                <Navigation />
+                <MobileNavigation />
+            </StyledWrapper>
+        </StyledHeader>
     );
 };
 

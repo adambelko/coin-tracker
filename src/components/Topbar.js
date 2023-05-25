@@ -8,12 +8,7 @@ const StyledTopbar = styled.div`
     margin: auto;
 `;
 
-const StyledLeftWrapper = styled.div`
-    display: flex;
-    gap: 1.5em;
-`;
-
-const StyledRightWrapper = styled.div`
+const StyledWrapper = styled.div`
     display: flex;
     gap: 1.5em;
 `;
@@ -32,7 +27,7 @@ const StyledValue = styled.div`
 const Topbar = () => {
     return (
         <StyledTopbar>
-            <StyledLeftWrapper>
+            <StyledWrapper>
                 <StyledElement>
                     Coins:<StyledValue>&nbsp;1010</StyledValue>
                 </StyledElement>
@@ -51,11 +46,11 @@ const Topbar = () => {
                 <StyledElement>
                     ETH Gas:<StyledValue>&nbsp;35 Gwei</StyledValue>
                 </StyledElement>
-            </StyledLeftWrapper>
-            <StyledRightWrapper>
+            </StyledWrapper>
+            <StyledWrapper>
                 <StyledElement pointer>USD</StyledElement>
                 <StyledElement pointer>Mode</StyledElement>
-            </StyledRightWrapper>
+            </StyledWrapper>
         </StyledTopbar>
     );
 };
