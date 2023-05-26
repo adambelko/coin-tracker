@@ -1,15 +1,19 @@
 import styled from "styled-components";
 
 import Topbar from "./Topbar";
-import Navigation from "./Navigation";
+import Navigation from "./Navbar/Navigation";
 import MobileNavigation from "./Navbar/MobileNavigation";
 
 const StyledHeader = styled.header`
     display: flex;
     flex-direction: column;
+
+    @media (max-width: 900px) {
+        flex-direction: column-reverse;
+    }
 `;
 
-const StyledWrapper = styled.div`
+const Wrapper = styled.div`
     border-top: 1px solid #eff2f5;
     padding: 1.2em 0;
 `;
@@ -17,13 +21,13 @@ const StyledWrapper = styled.div`
 const Header = () => {
     return (
         <StyledHeader>
-            <StyledWrapper>
+            <Wrapper>
                 <Topbar />
-            </StyledWrapper>
-            <StyledWrapper>
+            </Wrapper>
+            <Wrapper>
                 <Navigation />
                 <MobileNavigation />
-            </StyledWrapper>
+            </Wrapper>
         </StyledHeader>
     );
 };

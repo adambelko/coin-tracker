@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-const StyledTopbar = styled.div`
+const TopbarWrapper = styled.div`
     display: flex;
     justify-content: space-between;
     font-size: 0.8rem;
@@ -8,9 +8,24 @@ const StyledTopbar = styled.div`
     margin: auto;
 `;
 
-const StyledWrapper = styled.div`
+const LeftWrapper = styled.div`
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 1.5em;
+    white-space: nowrap;
+    overflow: auto;
+    &::-webkit-scrollbar {
+        display: none;
+    }
+`;
+
+const RightWrapper = styled.div`
     display: flex;
     gap: 1.5em;
+    margin-left: 1em;
+    @media (max-width: 900px) {
+        display: none;
+    }
 `;
 
 const StyledElement = styled.div`
@@ -26,8 +41,8 @@ const StyledValue = styled.div`
 
 const Topbar = () => {
     return (
-        <StyledTopbar>
-            <StyledWrapper>
+        <TopbarWrapper>
+            <LeftWrapper>
                 <StyledElement>
                     Coins:<StyledValue>&nbsp;1010</StyledValue>
                 </StyledElement>
@@ -46,12 +61,12 @@ const Topbar = () => {
                 <StyledElement>
                     ETH Gas:<StyledValue>&nbsp;35 Gwei</StyledValue>
                 </StyledElement>
-            </StyledWrapper>
-            <StyledWrapper>
+            </LeftWrapper>
+            <RightWrapper>
                 <StyledElement pointer>USD</StyledElement>
                 <StyledElement pointer>Mode</StyledElement>
-            </StyledWrapper>
-        </StyledTopbar>
+            </RightWrapper>
+        </TopbarWrapper>
     );
 };
 
