@@ -27,17 +27,17 @@ const WebsiteName = styled.h1`
 const ListItem = styled.li`
     display: flex;
     &:hover {
-        color: #4789f7;
+        color: ${(props) => props.theme.hover.blue};
     }
 `;
 
 const NavigationLink = styled(NavLink)`
-    color: #212532;
+    color: ${(props) => props.theme.colors.black};
     text-decoration: none;
 `;
 
 const SearchInput = styled.input`
-    background-color: #eff2f5;
+    background-color: ${(props) => props.theme.colors.greySecondary};
     width: 230px;
     padding: 1em;
     border: none;

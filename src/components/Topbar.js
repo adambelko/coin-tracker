@@ -30,12 +30,12 @@ const RightWrapper = styled.div`
 
 const StyledElement = styled.div`
     display: flex;
-    color: #6b7280;
+    color: ${(props) => props.theme.colors.grey};
     cursor: ${(props) => (props.pointer ? "pointer" : "auto")};
 `;
 
 const StyledValue = styled.div`
-    color: #4789f7;
+    color: ${(props) => props.theme.colors.blue};
     cursor: pointer;
 `;
 
