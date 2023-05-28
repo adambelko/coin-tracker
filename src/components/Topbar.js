@@ -4,7 +4,7 @@ const TopbarWrapper = styled.div`
     display: flex;
     justify-content: space-between;
     font-size: 0.8rem;
-    width: 85%;
+    width: 87%;
     margin: auto;
 `;
 
@@ -63,8 +63,8 @@ const Topbar = () => {
                 </StyledElement>
             </LeftWrapper>
             <RightWrapper>
-                <StyledElement pointer>USD</StyledElement>
-                <StyledElement pointer>Mode</StyledElement>
+                <StyledElement pointer={"pointer"}>USD</StyledElement>
+                <StyledElement pointer={"pointer"}>Mode</StyledElement>
             </RightWrapper>
         </TopbarWrapper>
     );

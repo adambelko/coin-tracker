@@ -10,7 +10,7 @@ const Navigation = styled.nav`
     display: flex;
     flex-direction: column;
     gap: 1em;
-    width: 85%;
+    width: 87%;
     margin: auto;
     align-items: center;
     display: none;

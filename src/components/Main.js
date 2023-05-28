@@ -3,14 +3,12 @@ import styled from "styled-components";
 
 import Home from "../pages/Home";
 
-const Main = () => {
-    const StyledMain = styled.main`
-        display: flex;
-        flex-direction: column;
-        width: 85%;
-        margin: auto;
-    `;
+const StyledMain = styled.main`
+    display: flex;
+    flex-direction: column;
+`;
 
+const Main = () => {
     return (
         <StyledMain>
             <Routes>

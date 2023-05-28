@@ -13,21 +13,25 @@ const StyledHeader = styled.header`
     }
 `;
 
-const Wrapper = styled.div`
-    border-top: 1px solid #eff2f5;
-    padding: 1.2em 0;
+const TopWrapper = styled.div`
+    border-top: 1px solid ${(props) => props.theme.colors.greySecondary};
+    padding: 1em 0;
+`;
+
+const BottomWrapper = styled(TopWrapper)`
+    border-bottom: 1px solid ${(props) => props.theme.colors.greySecondary};
 `;
 
 const Header = () => {
     return (
         <StyledHeader>
-            <Wrapper>
+            <TopWrapper>
                 <Topbar />
-            </Wrapper>
-            <Wrapper>
+            </TopWrapper>
+            <BottomWrapper>
                 <Navigation />
                 <MobileNavigation />
-            </Wrapper>
+            </BottomWrapper>
         </StyledHeader>
     );
 };
