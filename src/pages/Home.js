@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
+import Theme from "../styles/Theme";
 
 const SubHeader = styled.section`
   display: flex;
@@ -36,25 +37,56 @@ const StyledTable = styled.table`
 `;
 
 const TableHeaderGroup = styled.thead``;
-const TableBodyGroup = styled.tbody``;
-const TableRow = styled.tr``;
-
-const TableCell = styled.td`
-  padding: 1.6em 0;
-  border-top: 1px solid ${(props) => props.theme.colors.greySecondary};
-`;
 
 const TableHeader = styled.th`
   border-top: 1px solid ${(props) => props.theme.colors.greySecondary};
   font-size: 0.8rem;
-  padding: 0.8em 0;
-  font-weight: 600;
-  text-align: start;
+  padding: 0.8em 1em;
+  font-weight: bold;
+  text-align: ${(props) => (props.textalign ? "start" : "end")};
+`;
+
+const TableBodyGroup = styled.tbody``;
+
+const TableRow = styled.tr`
+  &:hover {
+    background-color: ${(props) => props.theme.colors.lightBlue};
+  }
+`;
+
+const TableCell = styled.td`
+  padding: 1.5em 1em;
+  border-top: 1px solid ${(props) => props.theme.colors.greySecondary};
+  font-size: 0.9rem;
+  text-align: ${(props) => (props.textalign ? "start" : "end")};
+  color: ${(props) => props.color};
+  white-space: nowrap;
+`;
+
+const StyledImage = styled.img`
+  height: 24px;
+  padding-right: 0.5em;
+`;
+
+const CellInnerWrapper = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const StyledSpan = styled.span`
+  font-weight: bold;
+`;
+
+const StyledTicker = styled.span`
+  color: ${(props) => props.theme.colors.darkBlue};
 `;
 
 const Home = () => {
   const [data, setData] = useState([]);
+  const [list, setList] = useState([]);
 
+  const listURL =
+    "https://api.coingecko.com/api/v3/coins/list?include_platform=false";
   const url =
     "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=20&page=1&sparkline=false&price_change_percentage=1h%2C%207d%2C&locale=en";
 
@@ -63,9 +95,15 @@ const Home = () => {
       .get(url)
       .then((response) => setData(response.data))
       .catch((error) => console.log(error));
+
+    axios
+      .get(listURL)
+      .then((response) => setList(response.data))
+      .catch((error) => console.log(error));
   }, []);
 
   console.log(data);
+  console.log(list);
 
   return (
     <React.Fragment>
@@ -84,8 +122,8 @@ const Home = () => {
         <StyledTable>
           <TableHeaderGroup>
             <TableRow>
-              <TableHeader>#</TableHeader>
-              <TableHeader>Name</TableHeader>
+              <TableHeader textalign="true">#</TableHeader>
+              <TableHeader textalign="true">Name</TableHeader>
               <TableHeader>Price</TableHeader>
               <TableHeader>1h%</TableHeader>
               <TableHeader>24h%</TableHeader>
@@ -96,8 +134,18 @@ const Home = () => {
           <TableBodyGroup>
             {data.map((coin, index) => (
               <TableRow key={coin.id}>
-                <TableCell>{index + 1}</TableCell>
-                <TableCell>{coin.name}</TableCell>
+                <TableCell color={Theme.colors.darkBlue} textalign="true">
+                  {index + 1}
+                </TableCell>
+                <TableCell textalign="true">
+                  <CellInnerWrapper>
+                    <StyledImage src={coin.image} />
+                    <StyledSpan>{coin.name}</StyledSpan>
+                    <StyledTicker>
+                      &nbsp;{coin.symbol.toUpperCase()}
+                    </StyledTicker>
+                  </CellInnerWrapper>
+                </TableCell>
                 <TableCell>${coin.current_price.toLocaleString()}</TableCell>
                 <TableCell>
                   {coin.price_change_percentage_1h_in_currency.toFixed(2)}%
@@ -105,9 +153,10 @@ const Home = () => {
                 <TableCell>
                   {coin.price_change_percentage_24h.toFixed(2)}%
                 </TableCell>
-                <TableCell>{coin.market_cap}</TableCell>
+                <TableCell>${coin.market_cap.toLocaleString()}</TableCell>
                 <TableCell>
-                  {coin.circulating_supply} {coin.symbol.toUpperCase()}
+                  {coin.circulating_supply.toLocaleString()}{" "}
+                  {coin.symbol.toUpperCase()}
                 </TableCell>
               </TableRow>
             ))}

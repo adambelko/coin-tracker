@@ -5,6 +5,7 @@ const Theme = {
     greySecondary: "#eff2f5",
     blue: "#4789f7",
     lightBlue: "#F9FAFD",
+    darkBlue: "#59667E",
   },
   hover: {
     blue: "#4789f7",
