@@ -8,12 +8,12 @@ const StyledMain = styled.main`
   flex-direction: column;
 `;
 
-const Main = () => {
+const Main = ({ globalData }) => {
   return (
     <StyledMain>
       <Routes>
         <Route to="/">
-          <Route index element={<Home />} />
+          <Route index element={<Home globalData={globalData} />} />
         </Route>
         <Route to="/cryptocurrencies">{/* <Route element={} /> */}</Route>
         <Route to="/news">{/* <Route index element={} /> */}</Route>

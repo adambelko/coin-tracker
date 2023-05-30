@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
-import Theme from "../styles/Theme";
+import theme from "../styles/Theme";
 
 const SubHeader = styled.section`
   display: flex;
@@ -36,8 +36,6 @@ const StyledTable = styled.table`
   margin: auto;
 `;
 
-const TableHeaderGroup = styled.thead``;
-
 const TableHeader = styled.th`
   border-top: 1px solid ${(props) => props.theme.colors.greySecondary};
   font-size: 0.8rem;
@@ -45,8 +43,6 @@ const TableHeader = styled.th`
   font-weight: bold;
   text-align: ${(props) => (props.textalign ? "start" : "end")};
 `;
-
-const TableBodyGroup = styled.tbody``;
 
 const TableRow = styled.tr`
   &:hover {
@@ -81,29 +77,22 @@ const StyledTicker = styled.span`
   color: ${(props) => props.theme.colors.darkBlue};
 `;
 
-const Home = () => {
-  const [data, setData] = useState([]);
-  const [list, setList] = useState([]);
+const Home = ({ globalData }) => {
+  const [marketData, setMarketData] = useState([]);
+  const formatMarketCap = (number) => (number / 1e12).toFixed(2);
 
-  const listURL =
-    "https://api.coingecko.com/api/v3/coins/list?include_platform=false";
-  const url =
+  const marketAPI =
     "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=20&page=1&sparkline=false&price_change_percentage=1h%2C%207d%2C&locale=en";
 
   useEffect(() => {
     axios
-      .get(url)
-      .then((response) => setData(response.data))
-      .catch((error) => console.log(error));
-
-    axios
-      .get(listURL)
-      .then((response) => setList(response.data))
+      .get(marketAPI)
+      .then((response) => setMarketData(response.data))
       .catch((error) => console.log(error));
   }, []);
 
-  console.log(data);
-  console.log(list);
+  console.log(marketData);
+  console.log(globalData);
 
   return (
     <React.Fragment>
@@ -113,14 +102,18 @@ const Home = () => {
             Today's Cryptocurrency Prices by Market Cap
           </InformationTitle>
           <InformationValue>
-            The global crypto market cap is $1.12T, a 1.01% increase over the
-            last day.
+            The global crypto market cap is $
+            {globalData &&
+              globalData.total_market_cap &&
+              globalData.total_market_cap.usd &&
+              formatMarketCap(globalData.total_market_cap.usd)}{" "}
+            T, a 1.01% increase over the last day.
           </InformationValue>
         </InformationPanel>
       </SubHeader>
       <TableWrapper>
         <StyledTable>
-          <TableHeaderGroup>
+          <thead>
             <TableRow>
               <TableHeader textalign="true">#</TableHeader>
               <TableHeader textalign="true">Name</TableHeader>
@@ -130,37 +123,38 @@ const Home = () => {
               <TableHeader>Market Cap</TableHeader>
               <TableHeader>Circulating Supply</TableHeader>
             </TableRow>
-          </TableHeaderGroup>
-          <TableBodyGroup>
-            {data.map((coin, index) => (
-              <TableRow key={coin.id}>
-                <TableCell color={Theme.colors.darkBlue} textalign="true">
-                  {index + 1}
-                </TableCell>
-                <TableCell textalign="true">
-                  <CellInnerWrapper>
-                    <StyledImage src={coin.image} />
-                    <StyledSpan>{coin.name}</StyledSpan>
-                    <StyledTicker>
-                      &nbsp;{coin.symbol.toUpperCase()}
-                    </StyledTicker>
-                  </CellInnerWrapper>
-                </TableCell>
-                <TableCell>${coin.current_price.toLocaleString()}</TableCell>
-                <TableCell>
-                  {coin.price_change_percentage_1h_in_currency.toFixed(2)}%
-                </TableCell>
-                <TableCell>
-                  {coin.price_change_percentage_24h.toFixed(2)}%
-                </TableCell>
-                <TableCell>${coin.market_cap.toLocaleString()}</TableCell>
-                <TableCell>
-                  {coin.circulating_supply.toLocaleString()}{" "}
-                  {coin.symbol.toUpperCase()}
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBodyGroup>
+          </thead>
+          <tbody>
+            {marketData &&
+              marketData.map((coin, index) => (
+                <TableRow key={coin.id}>
+                  <TableCell color={theme.colors.darkBlue} textalign="true">
+                    {index + 1}
+                  </TableCell>
+                  <TableCell textalign="true">
+                    <CellInnerWrapper>
+                      <StyledImage src={coin.image} />
+                      <StyledSpan>{coin.name}</StyledSpan>
+                      <StyledTicker>
+                        &nbsp;{coin.symbol.toUpperCase()}
+                      </StyledTicker>
+                    </CellInnerWrapper>
+                  </TableCell>
+                  <TableCell>${coin.current_price.toLocaleString()}</TableCell>
+                  <TableCell>
+                    {coin.price_change_percentage_1h_in_currency.toFixed(2)}%
+                  </TableCell>
+                  <TableCell>
+                    {coin.price_change_percentage_24h.toFixed(2)}%
+                  </TableCell>
+                  <TableCell>${coin.market_cap.toLocaleString()}</TableCell>
+                  <TableCell>
+                    {coin.circulating_supply.toLocaleString()}{" "}
+                    {coin.symbol.toUpperCase()}
+                  </TableCell>
+                </TableRow>
+              ))}
+          </tbody>
         </StyledTable>
       </TableWrapper>
     </React.Fragment>

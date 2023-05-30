@@ -3,7 +3,7 @@ import styled from "styled-components";
 const TopbarWrapper = styled.div`
   display: flex;
   justify-content: space-between;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   width: 87%;
   margin: auto;
 `;
@@ -35,28 +35,55 @@ const StyledElement = styled.div`
 `;
 
 const StyledValue = styled.div`
+  display: flex;
   color: ${(props) => props.theme.colors.blue};
   cursor: pointer;
 `;
 
-const Topbar = () => {
+const StyledPercentage = styled.div``;
+
+const Topbar = ({ data }) => {
   return (
     <TopbarWrapper>
       <LeftWrapper>
         <StyledElement>
-          Coins:<StyledValue>&nbsp;1010</StyledValue>
+          Coins:&nbsp;
+          <StyledValue>{data && data.active_cryptocurrencies}</StyledValue>
         </StyledElement>
         <StyledElement>
-          Market Cap:
-          <StyledValue>&nbsp;1,172,452,119,542</StyledValue>
+          Markets:&nbsp;
+          <StyledValue>{data && data.markets}</StyledValue>
         </StyledElement>
         <StyledElement>
-          24h Volume:
-          <StyledValue>&nbsp;$29,000,273,108</StyledValue>
+          Market Cap:&nbsp;
+          <StyledValue>
+            {data &&
+              data.total_market_cap &&
+              data.total_market_cap.usd &&
+              data.total_market_cap.usd.toLocaleString().slice(0, -4)}
+            &nbsp;
+            <StyledPercentage>
+              {data.market_cap_change_percentage_24h_usd &&
+                data.market_cap_change_percentage_24h_usd.toFixed(1)}
+              %
+            </StyledPercentage>
+          </StyledValue>
         </StyledElement>
         <StyledElement>
-          Dominance:
-          <StyledValue>&nbsp;BTC: 46.3% ETH: 19.5%</StyledValue>
+          Dominance:&nbsp;
+          <StyledValue>
+            BTC: $
+            {data &&
+              data.market_cap_percentage &&
+              data.market_cap_percentage.btc &&
+              data.market_cap_percentage.btc.toFixed(1)}
+            % &nbsp; ETH: $
+            {data &&
+              data.total_market_cap &&
+              data.market_cap_percentage.eth &&
+              data.market_cap_percentage.eth.toFixed(1)}
+            %
+          </StyledValue>
         </StyledElement>
         <StyledElement>
           ETH Gas:<StyledValue>&nbsp;35 Gwei</StyledValue>

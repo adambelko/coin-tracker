@@ -22,11 +22,11 @@ const BottomWrapper = styled(TopWrapper)`
   border-bottom: 1px solid ${(props) => props.theme.colors.greySecondary};
 `;
 
-const Header = () => {
+const Header = ({ globalData }) => {
   return (
     <StyledHeader>
       <TopWrapper>
-        <Topbar />
+        <Topbar data={globalData} />
       </TopWrapper>
       <BottomWrapper>
         <Navigation />
