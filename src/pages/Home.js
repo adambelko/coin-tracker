@@ -3,10 +3,16 @@ import styled from "styled-components";
 import axios from "axios";
 import theme from "../styles/Theme";
 
+const Wrapper = styled.div`
+  background: linear-gradient(
+    rgb(248, 250, 255) 0%,
+    rgba(248, 250, 253, 0) 200px
+  );
+`;
+
 const SubHeader = styled.section`
   display: flex;
   flex-direction: column;
-  background-color: ${(props) => props.theme.colors.lightBlue};
   padding: 2em 0;
 `;
 
@@ -15,16 +21,18 @@ const InformationPanel = styled.div`
   flex-direction: column;
   gap: 0.5em;
   width: 87%;
+  max-width: 1400px;
   margin: auto;
 `;
 
 const InformationTitle = styled.h2`
-  font-size: 1.6rem;
+  font-size: 1.7rem;
   font-weight: 600;
 `;
 
-const InformationValue = styled.p`
+const InformationDescription = styled.p`
   display: flex;
+  color: ${(props) => props.theme.colors.darkBlue};
 `;
 
 const TableWrapper = styled.div`
@@ -33,30 +41,33 @@ const TableWrapper = styled.div`
 
 const StyledTable = styled.table`
   width: 87%;
+  max-width: 1400px;
   margin: auto;
+  border-spacing: 0;
 `;
 
 const TableHeader = styled.th`
-  border-top: 1px solid ${(props) => props.theme.colors.greySecondary};
-  font-size: 0.8rem;
   padding: 0.8em 1em;
   font-weight: bold;
+  font-size: 0.8rem;
   text-align: ${(props) => (props.textalign ? "start" : "end")};
+  border-top: 1px solid ${(props) => props.theme.colors.greySecondary};
 `;
 
 const TableRow = styled.tr`
   &:hover {
-    background-color: ${(props) => props.theme.colors.lightBlue};
+    background-color: ${(props) =>
+      props.nobg ? "#FFFFFF" : props.theme.colors.lightBlue};
   }
 `;
 
 const TableCell = styled.td`
-  padding: 1.5em 1em;
-  border-top: 1px solid ${(props) => props.theme.colors.greySecondary};
+  padding: 1.8em 1em;
   font-size: 0.9rem;
-  text-align: ${(props) => (props.textalign ? "start" : "end")};
   color: ${(props) => props.color};
   white-space: nowrap;
+  text-align: ${(props) => (props.textalign ? "start" : "end")};
+  border-top: 1px solid ${(props) => props.theme.colors.greySecondary};
 `;
 
 const StyledImage = styled.img`
@@ -71,6 +82,14 @@ const CellInnerWrapper = styled.div`
 
 const StyledSpan = styled.span`
   font-weight: bold;
+  span {
+    color: ${(props) => props.theme.colors.darkBlue};
+    font-weight: 400;
+  }
+`;
+
+const StyledChange = styled(StyledSpan)`
+  color: ${(props) => (props.red ? "red" : "green")};
 `;
 
 const StyledTicker = styled.span`
@@ -80,6 +99,27 @@ const StyledTicker = styled.span`
 const Home = ({ globalData }) => {
   const [marketData, setMarketData] = useState([]);
   const formatMarketCap = (number) => (number / 1e12).toFixed(2);
+
+  const colorize = (data) => {
+    data = data.toFixed(1);
+    if (data < 0)
+      return (
+        <StyledChange red="true">
+          {data}% <span>decrease</span>
+        </StyledChange>
+      );
+    if (data > 0)
+      return (
+        <StyledChange>
+          {data}% <span>increase</span>
+        </StyledChange>
+      );
+    return (
+      <StyledSpan>
+        {data}% <span>change</span>
+      </StyledSpan>
+    );
+  };
 
   const marketAPI =
     "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=20&page=1&sparkline=false&price_change_percentage=1h%2C%207d%2C&locale=en";
@@ -95,26 +135,32 @@ const Home = ({ globalData }) => {
   console.log(globalData);
 
   return (
-    <React.Fragment>
+    <Wrapper>
       <SubHeader>
         <InformationPanel>
           <InformationTitle>
             Today's Cryptocurrency Prices by Market Cap
           </InformationTitle>
-          <InformationValue>
-            The global crypto market cap is $
+          <InformationDescription>
+            The global crypto market cap is
             {globalData &&
               globalData.total_market_cap &&
-              globalData.total_market_cap.usd &&
-              formatMarketCap(globalData.total_market_cap.usd)}{" "}
-            T, a 1.01% increase over the last day.
-          </InformationValue>
+              globalData.total_market_cap.usd && (
+                <StyledSpan>
+                  &nbsp;${formatMarketCap(globalData.total_market_cap.usd)}T
+                </StyledSpan>
+              )}
+            , a &nbsp;
+            {globalData.market_cap_change_percentage_24h_usd &&
+              colorize(globalData.market_cap_change_percentage_24h_usd)}
+            &nbsp; over the last day.
+          </InformationDescription>
         </InformationPanel>
       </SubHeader>
       <TableWrapper>
         <StyledTable>
           <thead>
-            <TableRow>
+            <TableRow nobg="true">
               <TableHeader textalign="true">#</TableHeader>
               <TableHeader textalign="true">Name</TableHeader>
               <TableHeader>Price</TableHeader>
@@ -157,7 +203,7 @@ const Home = ({ globalData }) => {
           </tbody>
         </StyledTable>
       </TableWrapper>
-    </React.Fragment>
+    </Wrapper>
   );
 };
 

@@ -9,10 +9,10 @@ import { IoMdCloseCircleOutline } from "react-icons/io";
 const Navigation = styled.nav`
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 1em;
   width: 87%;
   margin: auto;
-  align-items: center;
   display: none;
   @media (max-width: 900px) {
     display: flex;
@@ -27,8 +27,8 @@ const NavigationWrapper = styled.div`
 
 const NavigationRightWrapper = styled.div`
   display: flex;
-  align-items: center;
   gap: 1em;
+  align-items: center;
 `;
 
 const StyledElement = styled.div`
@@ -43,12 +43,12 @@ const List = styled.ul`
   align-items: center;
   font-weight: 600;
   gap: 2em;
+  position: absolute;
   width: 100%;
   height: 100%;
-  background-color: white;
-  position: absolute;
-  top: 4em;
   left: 0;
+  top: 4em;
+  background-color: white;
 `;
 
 const WebsiteName = styled.h1`
@@ -64,17 +64,17 @@ const ListItem = styled.li`
 `;
 
 const NavigationLink = styled(NavLink)`
-  color: ${(props) => props.theme.colors.black};
   text-decoration: none;
+  color: ${(props) => props.theme.colors.black};
 `;
 
 const SearchInput = styled.input`
-  background-color: ${(props) => props.theme.colors.greySecondary};
   width: 100%;
-  padding: 0.8em;
+  padding: 0.9em;
+  cursor: pointer;
   border: none;
   border-radius: 8px;
-  cursor: pointer;
+  background-color: ${(props) => props.theme.colors.greySecondary};
 `;
 
 const MobileNavigation = () => {

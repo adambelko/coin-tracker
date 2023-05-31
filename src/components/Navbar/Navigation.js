@@ -6,6 +6,7 @@ const NavbarContainer = styled.nav`
   justify-content: space-between;
   align-items: center;
   width: 87%;
+  max-width: 1400px;
   margin: auto;
 
   @media (max-width: 900px) {
@@ -32,17 +33,17 @@ const ListItem = styled.li`
 `;
 
 const NavigationLink = styled(NavLink)`
-  color: ${(props) => props.theme.colors.black};
   text-decoration: none;
+  color: ${(props) => props.theme.colors.black};
 `;
 
 const SearchInput = styled.input`
-  background-color: ${(props) => props.theme.colors.greySecondary};
   width: 230px;
-  padding: 1em;
+  padding: 0.9em;
   border: none;
   border-radius: 8px;
   cursor: pointer;
+  background-color: ${(props) => props.theme.colors.greySecondary};
 `;
 
 const Navigation = () => {

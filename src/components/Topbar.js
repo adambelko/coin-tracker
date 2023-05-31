@@ -3,8 +3,9 @@ import styled from "styled-components";
 const TopbarWrapper = styled.div`
   display: flex;
   justify-content: space-between;
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   width: 87%;
+  max-width: 1400px;
   margin: auto;
 `;
 
@@ -40,9 +41,18 @@ const StyledValue = styled.div`
   cursor: pointer;
 `;
 
-const StyledPercentage = styled.div``;
+const StyledChange = styled.span`
+  color: ${(props) => (props.red ? "red" : "green")};
+`;
 
 const Topbar = ({ data }) => {
+  const colorize = (data) => {
+    data = data.toFixed(1);
+    if (data < 0) return <StyledChange red="true">{data}%</StyledChange>;
+    if (data > 0) return <StyledChange>{data}%</StyledChange>;
+    return <StyledValue>{data}%</StyledValue>;
+  };
+
   return (
     <TopbarWrapper>
       <LeftWrapper>
@@ -62,11 +72,10 @@ const Topbar = ({ data }) => {
               data.total_market_cap.usd &&
               data.total_market_cap.usd.toLocaleString().slice(0, -4)}
             &nbsp;
-            <StyledPercentage>
+            <StyledChange>
               {data.market_cap_change_percentage_24h_usd &&
-                data.market_cap_change_percentage_24h_usd.toFixed(1)}
-              %
-            </StyledPercentage>
+                colorize(data.market_cap_change_percentage_24h_usd)}
+            </StyledChange>
           </StyledValue>
         </StyledElement>
         <StyledElement>
