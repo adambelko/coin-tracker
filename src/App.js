@@ -16,7 +16,6 @@ function App() {
       .then((response) => setGlobalData(response.data.data))
       .catch((error) => console.log(error));
   }, []);
-  console.log(globalData);
 
   return (
     <React.Fragment>

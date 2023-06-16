@@ -3,6 +3,8 @@ import styled from "styled-components";
 import axios from "axios";
 import theme from "../styles/Theme";
 
+import Pagination from "../components/Pagination";
+
 const Wrapper = styled.div`
   background: linear-gradient(
     rgb(248, 250, 255) 0%,
@@ -97,7 +99,10 @@ const StyledTicker = styled.span`
 `;
 
 const Home = ({ globalData }) => {
+  const [page, setPage] = useState(1);
+  const [perPage, setPerPage] = useState(20);
   const [marketData, setMarketData] = useState([]);
+
   const formatMarketCap = (number) => (number / 1e12).toFixed(2);
 
   const colorize = (data) => {
@@ -121,18 +126,17 @@ const Home = ({ globalData }) => {
     );
   };
 
-  const marketAPI =
-    "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=20&page=1&sparkline=false&price_change_percentage=1h%2C%207d%2C&locale=en";
+  const marketAPI = `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=${perPage}&page=${page}&sparkline=false&price_change_percentage=1h%2C%207d%2C&locale=en`;
 
   useEffect(() => {
     axios
       .get(marketAPI)
       .then((response) => setMarketData(response.data))
       .catch((error) => console.log(error));
-  }, []);
+  }, [page, perPage]);
 
-  console.log(marketData);
-  console.log(globalData);
+  // console.log(marketData);
+  // console.log(globalData);
 
   return (
     <Wrapper>
@@ -150,7 +154,7 @@ const Home = ({ globalData }) => {
                   &nbsp;${formatMarketCap(globalData.total_market_cap.usd)}T
                 </StyledSpan>
               )}
-            , a &nbsp;
+            , a&nbsp;
             {globalData.market_cap_change_percentage_24h_usd &&
               colorize(globalData.market_cap_change_percentage_24h_usd)}
             &nbsp; over the last day.
@@ -203,6 +207,15 @@ const Home = ({ globalData }) => {
           </tbody>
         </StyledTable>
       </TableWrapper>
+      <div>
+        <Pagination
+          page={page}
+          setPage={setPage}
+          perPage={perPage}
+          totalCoinsNumber={globalData.active_cryptocurrencies}
+          marketData={marketData}
+        />
+      </div>
     </Wrapper>
   );
 };
