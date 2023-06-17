@@ -83,7 +83,7 @@ const CellInnerWrapper = styled.div`
 `;
 
 const StyledSpan = styled.span`
-  font-weight: bold;
+  font-weight: ${(props) => props.$bold || "400"};
   span {
     color: ${(props) => props.theme.colors.darkBlue};
     font-weight: 400;
@@ -105,25 +105,33 @@ const Home = ({ globalData }) => {
 
   const formatMarketCap = (number) => (number / 1e12).toFixed(2);
 
-  const colorize = (data) => {
+  const colorizeMarketCap = (data) => {
     data = data.toFixed(1);
     if (data < 0)
       return (
-        <StyledChange red="true">
+        <StyledChange $bold="bold" red="true">
           {data}% <span>decrease</span>
         </StyledChange>
       );
     if (data > 0)
       return (
-        <StyledChange>
+        <StyledChange $bold="bold">
           {data}% <span>increase</span>
         </StyledChange>
       );
     return (
-      <StyledSpan>
+      <StyledSpan $bold="bold">
         {data}% <span>change</span>
       </StyledSpan>
     );
+  };
+
+  const colorizePercentageChange = (data) => {
+    if (data < 0) {
+      return <StyledChange red="true">{data}%</StyledChange>;
+    } else {
+      return <StyledChange>{data}%</StyledChange>;
+    }
   };
 
   const marketAPI = `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=${perPage}&page=${page}&sparkline=false&price_change_percentage=1h%2C%207d%2C&locale=en`;
@@ -150,13 +158,15 @@ const Home = ({ globalData }) => {
             {globalData &&
               globalData.total_market_cap &&
               globalData.total_market_cap.usd && (
-                <StyledSpan>
+                <StyledSpan $bold="bold">
                   &nbsp;${formatMarketCap(globalData.total_market_cap.usd)}T
                 </StyledSpan>
               )}
             , a&nbsp;
             {globalData.market_cap_change_percentage_24h_usd &&
-              colorize(globalData.market_cap_change_percentage_24h_usd)}
+              colorizeMarketCap(
+                globalData.market_cap_change_percentage_24h_usd
+              )}
             &nbsp; over the last day.
           </InformationDescription>
         </InformationPanel>
@@ -184,27 +194,33 @@ const Home = ({ globalData }) => {
                   <TableCell textalign="true">
                     <CellInnerWrapper>
                       <StyledImage src={coin.image} />
-                      <StyledSpan>{coin.name}</StyledSpan>
+                      <StyledSpan $bold="bold">{coin.name}</StyledSpan>
                       <StyledTicker>
                         &nbsp;{coin.symbol.toUpperCase()}
                       </StyledTicker>
                     </CellInnerWrapper>
                   </TableCell>
                   <TableCell>
-                    ${coin.current_price && coin.current_price.toLocaleString()}
+                    {coin.current_price
+                      ? `$${coin.current_price.toLocaleString()}`
+                      : "-"}
                   </TableCell>
                   <TableCell>
-                    {coin.price_change_percentage_1h_in_currency &&
-                      coin.price_change_percentage_1h_in_currency.toFixed(2)}
-                    %
+                    {coin.price_change_percentage_1h_in_currency
+                      ? colorizePercentageChange(
+                          coin.price_change_percentage_1h_in_currency.toFixed(2)
+                        )
+                      : "-"}
                   </TableCell>
                   <TableCell>
-                    {coin.price_change_percentage_24h &&
-                      coin.price_change_percentage_24h.toFixed(2)}
-                    %
+                    {coin.price_change_percentage_24h
+                      ? colorizePercentageChange(
+                          coin.price_change_percentage_24h.toFixed(2)
+                        )
+                      : "-"}
                   </TableCell>
                   <TableCell>
-                    ${coin.market_cap && coin.market_cap.toLocaleString()}
+                    {coin.market_cap ? coin.market_cap.toLocaleString() : "-"}
                   </TableCell>
                   <TableCell>
                     {coin.circulating_supply &&
