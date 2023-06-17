@@ -38,7 +38,7 @@ const InformationDescription = styled.p`
 `;
 
 const TableWrapper = styled.div`
-  overflow-x: scroll;
+  /* overflow-x: scroll; */
 `;
 
 const StyledTable = styled.table`
@@ -135,7 +135,7 @@ const Home = ({ globalData }) => {
       .catch((error) => console.log(error));
   }, [page, perPage]);
 
-  // console.log(marketData);
+  console.log(marketData);
   // console.log(globalData);
 
   return (
@@ -176,10 +176,10 @@ const Home = ({ globalData }) => {
           </thead>
           <tbody>
             {marketData &&
-              marketData.map((coin, index) => (
+              marketData.map((coin) => (
                 <TableRow key={coin.id}>
                   <TableCell color={theme.colors.darkBlue} textalign="true">
-                    {index + 1}
+                    {coin.market_cap_rank}
                   </TableCell>
                   <TableCell textalign="true">
                     <CellInnerWrapper>
@@ -190,17 +190,26 @@ const Home = ({ globalData }) => {
                       </StyledTicker>
                     </CellInnerWrapper>
                   </TableCell>
-                  <TableCell>${coin.current_price.toLocaleString()}</TableCell>
                   <TableCell>
-                    {coin.price_change_percentage_1h_in_currency.toFixed(2)}%
+                    ${coin.current_price && coin.current_price.toLocaleString()}
                   </TableCell>
                   <TableCell>
-                    {coin.price_change_percentage_24h.toFixed(2)}%
+                    {coin.price_change_percentage_1h_in_currency &&
+                      coin.price_change_percentage_1h_in_currency.toFixed(2)}
+                    %
                   </TableCell>
-                  <TableCell>${coin.market_cap.toLocaleString()}</TableCell>
                   <TableCell>
-                    {coin.circulating_supply.toLocaleString()}{" "}
-                    {coin.symbol.toUpperCase()}
+                    {coin.price_change_percentage_24h &&
+                      coin.price_change_percentage_24h.toFixed(2)}
+                    %
+                  </TableCell>
+                  <TableCell>
+                    ${coin.market_cap && coin.market_cap.toLocaleString()}
+                  </TableCell>
+                  <TableCell>
+                    {coin.circulating_supply &&
+                      coin.circulating_supply.toLocaleString()}{" "}
+                    {coin.symbol && coin.symbol.toUpperCase()}
                   </TableCell>
                 </TableRow>
               ))}
