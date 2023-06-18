@@ -101,12 +101,18 @@ const StyledTicker = styled.span`
 `;
 
 const SubTableManager = styled.div`
+  margin-top: 1em;
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 87%;
-  margin: 1em auto;
-  margin-bottom: 5em;
+  max-width: 1400px;
+  margin: auto;
+  border-top: 1px solid ${(props) => props.theme.colors.greySecondary};
+`;
+
+const SubTableManagerSpan = styled(StyledSpan)`
+  margin-top: 1em;
 `;
 
 const CryptoNewsWrapper = styled.div`
@@ -118,6 +124,7 @@ const CryptoNews = styled.div`
   width: 87%;
   max-width: 1400px;
   margin: auto;
+  margin-top: 5em;
 `;
 
 const NewsLeftSideWrapper = styled.div`
@@ -298,13 +305,13 @@ const Home = ({ globalData }) => {
         </StyledTable>
       </TableWrapper>
       <SubTableManager>
-        <StyledSpan>
+        <SubTableManagerSpan>
           {marketData && marketData.length > 0
             ? `Showing ${marketData[0].market_cap_rank} - ${
                 marketData[0].market_cap_rank + perPage - 1
               } out of ${globalData.active_cryptocurrencies}`
             : "Loading..."}
-        </StyledSpan>
+        </SubTableManagerSpan>
         <Pagination
           page={page}
           setPage={setPage}

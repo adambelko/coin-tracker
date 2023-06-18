@@ -5,6 +5,7 @@ const StyledList = styled.ul`
   display: flex;
   gap: 0.3em;
   justify-content: center;
+  margin-top: 1em;
 `;
 
 const ListItem = styled.li`
