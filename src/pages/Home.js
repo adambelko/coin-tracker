@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
+import ScrollToTop from "react-scroll-to-top";
 import styled from "styled-components";
 import axios from "axios";
-import theme from "../styles/Theme";
 
 import Pagination from "../components/Pagination";
 import Dropdown from "../components/Dropdown";
@@ -158,6 +158,7 @@ const Home = ({ globalData }) => {
 
   return (
     <Wrapper>
+      <ScrollToTop smooth />
       <SubHeader>
         <InformationPanel>
           <InformationTitle>
@@ -231,9 +232,9 @@ const Home = ({ globalData }) => {
                     {coin.market_cap ? coin.market_cap.toLocaleString() : "-"}
                   </TableCell>
                   <TableCell>
-                    {coin.circulating_supply &&
-                      coin.circulating_supply.toLocaleString()}{" "}
-                    {coin.symbol && coin.symbol.toUpperCase()}
+                    {coin.circulating_supply && coin.symbol
+                      ? `${coin.circulating_supply.toLocaleString()}  ${coin.symbol.toUpperCase()}`
+                      : "-"}
                   </TableCell>
                 </TableRow>
               ))}

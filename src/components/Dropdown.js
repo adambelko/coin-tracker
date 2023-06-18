@@ -113,6 +113,7 @@ const Dropdown = (props) => {
   const handleClick = (value) => {
     props.setPerPage(value);
     setOpen(!open);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (

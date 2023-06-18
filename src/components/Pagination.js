@@ -1,6 +1,5 @@
 import styled from "styled-components";
-import { IoIosArrowBack } from "react-icons/io";
-import { IoIosArrowForward } from "react-icons/io";
+import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 
 const StyledList = styled.ul`
   display: flex;
