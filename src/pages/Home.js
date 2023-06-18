@@ -4,6 +4,7 @@ import axios from "axios";
 import theme from "../styles/Theme";
 
 import Pagination from "../components/Pagination";
+import Dropdown from "../components/Dropdown";
 
 const Wrapper = styled.div`
   background: linear-gradient(
@@ -66,7 +67,7 @@ const TableRow = styled.tr`
 const TableCell = styled.td`
   padding: 1.8em 1em;
   font-size: 0.9rem;
-  color: ${(props) => props.color};
+  color: ${(props) => props.theme.colors.darkBlue};
   white-space: nowrap;
   text-align: ${(props) => (props.textalign ? "start" : "end")};
   border-top: 1px solid ${(props) => props.theme.colors.greySecondary};
@@ -96,6 +97,15 @@ const StyledChange = styled(StyledSpan)`
 
 const StyledTicker = styled.span`
   color: ${(props) => props.theme.colors.darkBlue};
+`;
+
+const SubTableManager = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 87%;
+  margin: 1em auto;
+  margin-bottom: 5em;
 `;
 
 const Home = ({ globalData }) => {
@@ -188,9 +198,7 @@ const Home = ({ globalData }) => {
             {marketData &&
               marketData.map((coin) => (
                 <TableRow key={coin.id}>
-                  <TableCell color={theme.colors.darkBlue} textalign="true">
-                    {coin.market_cap_rank}
-                  </TableCell>
+                  <TableCell textalign="true">{coin.market_cap_rank}</TableCell>
                   <TableCell textalign="true">
                     <CellInnerWrapper>
                       <StyledImage src={coin.image} />
@@ -232,7 +240,14 @@ const Home = ({ globalData }) => {
           </tbody>
         </StyledTable>
       </TableWrapper>
-      <div>
+      <SubTableManager>
+        <StyledSpan>
+          {marketData && marketData.length > 0
+            ? `Showing ${marketData[0].market_cap_rank} - ${
+                marketData[0].market_cap_rank + perPage - 1
+              } out of ${globalData.active_cryptocurrencies}`
+            : "Loading..."}
+        </StyledSpan>
         <Pagination
           page={page}
           setPage={setPage}
@@ -240,7 +255,8 @@ const Home = ({ globalData }) => {
           totalCoinsNumber={globalData.active_cryptocurrencies}
           marketData={marketData}
         />
-      </div>
+        <Dropdown perPage={perPage} setPerPage={setPerPage} />
+      </SubTableManager>
     </Wrapper>
   );
 };

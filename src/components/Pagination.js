@@ -6,7 +6,6 @@ const StyledList = styled.ul`
   display: flex;
   gap: 0.3em;
   justify-content: center;
-  margin-bottom: 2em;
 `;
 
 const ListItem = styled.li`
@@ -15,7 +14,8 @@ const ListItem = styled.li`
 
 const Button = styled.button`
   display: flex;
-  background-color: ${(props) => (props.active ? "blue" : "white")};
+  background-color: ${(props) =>
+    props.active ? props.theme.colors.blue : "white"};
   color: ${(props) => (props.active ? "white" : "black")};
   font-size: 1rem;
   font-weight: bold;
@@ -25,7 +25,9 @@ const Button = styled.button`
   cursor: pointer;
   &:hover {
     background-color: ${(props) =>
-      props.active ? "blue" : props.theme.colors.greySecondary};
+      props.active
+        ? props.theme.colors.blue
+        : props.theme.colors.greySecondary};
   }
 `;
 
@@ -36,43 +38,44 @@ const NavigationButton = styled(Button)`
 `;
 
 const Pagination = (props) => {
-  const totalNumber = Math.ceil(props.totalCoinsNumber / props.perPage);
+  const { page, setPage, perPage, totalCoinsNumber, marketData } = props;
+
+  const totalNumber = Math.ceil(totalCoinsNumber / perPage);
 
   const next = () => {
-    if (props.page === totalNumber) {
+    if (page === totalNumber) {
       return null;
     } else {
-      props.setPage(props.page + 1);
+      setPage(page + 1);
     }
   };
 
   const prev = () => {
-    if (props.page === 1) {
+    if (page === 1) {
       return null;
     } else {
-      props.setPage(props.page - 1);
+      setPage(page - 1);
     }
   };
 
   const multiStepNext = () => {
-    if (props.page + 3 >= totalNumber) {
-      props.setPage(totalNumber - 1);
+    if (page + 3 >= totalNumber) {
+      setPage(totalNumber - 1);
     } else {
-      props.setPage(props.page + 3);
+      setPage(page + 3);
     }
   };
 
   const multiStepPrev = () => {
-    if (props.page - 3 <= 1) {
-      props.setPage(totalNumber + 1);
+    if (page - 3 <= 1) {
+      setPage(totalNumber + 1);
     } else {
-      props.setPage(props.page - 2);
+      setPage(page - 2);
     }
   };
 
   return (
-    props.marketData &&
-    props.marketData.length >= props.perPage && (
+    marketData && (
       <StyledList>
         <ListItem>
           <NavigationButton>
@@ -80,40 +83,38 @@ const Pagination = (props) => {
           </NavigationButton>
         </ListItem>
 
-        {props.page + 1 === totalNumber || props.page === totalNumber ? (
+        {page + 1 === totalNumber || page === totalNumber ? (
           <ListItem>
             {" "}
             <NavigationButton onClick={multiStepPrev}>...</NavigationButton>
           </ListItem>
         ) : null}
 
-        {props.page - 1 !== 0 ? (
+        {page - 1 !== 0 ? (
           <ListItem>
-            <Button onClick={prev}> {props.page - 1} </Button>
+            <Button onClick={prev}> {page - 1} </Button>
           </ListItem>
         ) : null}
         <ListItem>
-          <Button active="true">{props.page}</Button>
+          <Button active="true">{page}</Button>
         </ListItem>
 
-        {props.page + 1 !== totalNumber && props.page !== totalNumber ? (
+        {page + 1 !== totalNumber && page !== totalNumber ? (
           <ListItem>
-            <Button onClick={next}>{props.page + 1}</Button>
+            <Button onClick={next}>{page + 1}</Button>
           </ListItem>
         ) : null}
 
-        {props.page + 1 !== totalNumber && props.page !== totalNumber ? (
+        {page + 1 !== totalNumber && page !== totalNumber ? (
           <ListItem>
             {" "}
             <NavigationButton onClick={multiStepNext}>...</NavigationButton>
           </ListItem>
         ) : null}
 
-        {props.page !== totalNumber ? (
+        {page !== totalNumber ? (
           <ListItem>
-            <Button onClick={() => props.setPage(totalNumber)}>
-              {totalNumber}
-            </Button>
+            <Button onClick={() => setPage(totalNumber)}>{totalNumber}</Button>
           </ListItem>
         ) : null}
         <ListItem>
