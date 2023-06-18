@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import ScrollToTop from "react-scroll-to-top";
 import styled from "styled-components";
 import axios from "axios";
+import newsImg from "../images/newsletter_bg_light.svg";
 
 import Pagination from "../components/Pagination";
 import Dropdown from "../components/Dropdown";
@@ -106,6 +107,61 @@ const SubTableManager = styled.div`
   width: 87%;
   margin: 1em auto;
   margin-bottom: 5em;
+`;
+
+const CryptoNewsWrapper = styled.div`
+  background-color: #f8fafd;
+`;
+
+const CryptoNews = styled.div`
+  display: flex;
+  width: 87%;
+  max-width: 1400px;
+  margin: auto;
+`;
+
+const NewsLeftSideWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  min-width: 50%;
+  height: 460px;
+  padding-left: 1em;
+`;
+
+const NewsMainText = styled.div`
+  font-size: 2.5rem;
+  font-weight: 400;
+  padding-top: 2.5em;
+  span {
+    font-weight: bold;
+  }
+`;
+
+const NewsParagraph = styled.p`
+  font-size: 1.2rem;
+  line-height: 1.4;
+  padding-top: 1.5em;
+  color: ${(props) => props.theme.colors.darkBlue};
+`;
+
+const NewsSubscribeButton = styled.button`
+  width: fit-content;
+  margin-top: 2.5em;
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: white;
+  padding: 1em 1.6em;
+  border: none;
+  border-radius: 8px;
+  background-color: ${(props) => props.theme.colors.darkBlueBtn};
+  &:hover {
+    background-color: ${(props) => props.theme.hover.darkBlueBtn};
+  }
+`;
+
+const NewsImgWrapper = styled.img`
+  padding-top: 1.5em;
+  object-fit: cover;
 `;
 
 const Home = ({ globalData }) => {
@@ -258,6 +314,21 @@ const Home = ({ globalData }) => {
         />
         <Dropdown perPage={perPage} setPerPage={setPerPage} />
       </SubTableManager>
+      <CryptoNewsWrapper>
+        <CryptoNews>
+          <NewsLeftSideWrapper>
+            <NewsMainText>
+              Be the first to know about <span>crypto news every day</span>
+            </NewsMainText>
+            <NewsParagraph>
+              Get crypto analysis, news and updates right to your inbox! Sign up
+              here so you don't miss a single newsletter.
+            </NewsParagraph>
+            <NewsSubscribeButton>Subscribe Now</NewsSubscribeButton>
+          </NewsLeftSideWrapper>
+          <NewsImgWrapper src={newsImg} />
+        </CryptoNews>
+      </CryptoNewsWrapper>
     </Wrapper>
   );
 };

@@ -6,11 +6,13 @@ const theme = {
     blue: "#4789f7",
     lightBlue: "#F9FAFD",
     darkBlue: "#59667E",
+    darkBlueBtn: "#3861FB",
     green: "#18C785",
     red: "#EA4048",
   },
   hover: {
     blue: "#4789f7",
+    darkBlueBtn: "#3359EA",
   },
 };
 

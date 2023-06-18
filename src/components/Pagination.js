@@ -14,7 +14,7 @@ const ListItem = styled.li`
 const Button = styled.button`
   display: flex;
   background-color: ${(props) =>
-    props.active ? props.theme.colors.blue : "white"};
+    props.active ? props.theme.colors.darkBlueBtn : "white"};
   color: ${(props) => (props.active ? "white" : "black")};
   font-size: 1rem;
   font-weight: bold;
@@ -25,7 +25,7 @@ const Button = styled.button`
   &:hover {
     background-color: ${(props) =>
       props.active
-        ? props.theme.colors.blue
+        ? props.theme.colors.darkBlueBtn
         : props.theme.colors.greySecondary};
   }
 `;
