@@ -29,11 +29,25 @@ const Button = styled.button`
         ? props.theme.colors.darkBlueBtn
         : props.theme.colors.greySecondary};
   }
+
+  @media (max-width: 900px) {
+    background-color: ${(props) =>
+      props.active
+        ? props.theme.colors.darkBlueBtn
+        : props.theme.colors.lightBlue};
+  }
+  color: ${(props) => (props.active ? "white" : "black")};
 `;
 
 const NavigationButton = styled(Button)`
   &:hover {
     background-color: white;
+  }
+
+  @media (max-width: 900px) {
+    &:hover {
+      background-color: ${(props) => props.theme.colors.lightBlue};
+    }
   }
 `;
 

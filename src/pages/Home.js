@@ -4,8 +4,7 @@ import styled from "styled-components";
 import axios from "axios";
 import newsImg from "../images/newsletter_bg_light.svg";
 
-import Pagination from "../components/Pagination";
-import Dropdown from "../components/Dropdown";
+import TableManager from "../components/TableManager/TableManager";
 
 const Wrapper = styled.div`
   background: linear-gradient(
@@ -40,7 +39,7 @@ const InformationDescription = styled.p`
 `;
 
 const TableWrapper = styled.div`
-  /* overflow-x: scroll; */
+  overflow-x: scroll;
 `;
 
 const StyledTable = styled.table`
@@ -100,23 +99,8 @@ const StyledTicker = styled.span`
   color: ${(props) => props.theme.colors.darkBlue};
 `;
 
-const SubTableManager = styled.div`
-  margin-top: 1em;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 87%;
-  max-width: 1400px;
-  margin: auto;
-  border-top: 1px solid ${(props) => props.theme.colors.greySecondary};
-`;
-
-const SubTableManagerSpan = styled(StyledSpan)`
-  margin-top: 1em;
-`;
-
 const CryptoNewsWrapper = styled.div`
-  background-color: #f8fafd;
+  background-color: ${(props) => props.theme.colors.lightBlue};
 `;
 
 const CryptoNews = styled.div`
@@ -160,6 +144,7 @@ const NewsSubscribeButton = styled.button`
   padding: 1em 1.6em;
   border: none;
   border-radius: 8px;
+  cursor: pointer;
   background-color: ${(props) => props.theme.colors.darkBlueBtn};
   &:hover {
     background-color: ${(props) => props.theme.hover.darkBlueBtn};
@@ -274,7 +259,7 @@ const Home = ({ globalData }) => {
                   </TableCell>
                   <TableCell>
                     {coin.current_price
-                      ? `$${coin.current_price.toLocaleString()}`
+                      ? `$${coin.current_price.toFixed(2)}`
                       : "-"}
                   </TableCell>
                   <TableCell>
@@ -304,23 +289,14 @@ const Home = ({ globalData }) => {
           </tbody>
         </StyledTable>
       </TableWrapper>
-      <SubTableManager>
-        <SubTableManagerSpan>
-          {marketData && marketData.length > 0
-            ? `Showing ${marketData[0].market_cap_rank} - ${
-                marketData[0].market_cap_rank + perPage - 1
-              } out of ${globalData.active_cryptocurrencies}`
-            : "Loading..."}
-        </SubTableManagerSpan>
-        <Pagination
-          page={page}
-          setPage={setPage}
-          perPage={perPage}
-          totalCoinsNumber={globalData.active_cryptocurrencies}
-          marketData={marketData}
-        />
-        <Dropdown perPage={perPage} setPerPage={setPerPage} />
-      </SubTableManager>
+      <TableManager
+        marketData={marketData}
+        globalData={globalData}
+        perPage={perPage}
+        page={page}
+        setPage={setPage}
+        setPerPage={setPerPage}
+      />
       <CryptoNewsWrapper>
         <CryptoNews>
           <NewsLeftSideWrapper>
@@ -333,7 +309,7 @@ const Home = ({ globalData }) => {
             </NewsParagraph>
             <NewsSubscribeButton>Subscribe Now</NewsSubscribeButton>
           </NewsLeftSideWrapper>
-          <NewsImgWrapper src={newsImg} />
+          {/* <NewsImgWrapper src={newsImg} /> */}
         </CryptoNews>
       </CryptoNewsWrapper>
     </Wrapper>
