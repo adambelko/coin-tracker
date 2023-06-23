@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import ScrollToTop from "react-scroll-to-top";
 import styled from "styled-components";
 import axios from "axios";
-import newsImg from "../images/newsletter_bg_light.svg";
 
 import TableManager from "../components/TableManager/TableManager";
+import Newsletter from "../components/Newsletter";
 
 const Wrapper = styled.div`
   background: linear-gradient(
@@ -99,69 +99,19 @@ const StyledTicker = styled.span`
   color: ${(props) => props.theme.colors.darkBlue};
 `;
 
-const CryptoNewsWrapper = styled.div`
-  background-color: ${(props) => props.theme.colors.lightBlue};
-`;
-
-const CryptoNews = styled.div`
-  display: flex;
-  width: 87%;
-  max-width: 1400px;
-  margin: auto;
-  margin-top: 5em;
-`;
-
-const NewsLeftSideWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  min-width: 50%;
-  height: 460px;
-  padding-left: 1em;
-`;
-
-const NewsMainText = styled.div`
-  font-size: 2.5rem;
-  font-weight: 400;
-  padding-top: 2.5em;
-  span {
-    font-weight: bold;
-  }
-`;
-
-const NewsParagraph = styled.p`
-  font-size: 1.2rem;
-  line-height: 1.4;
-  padding-top: 1.5em;
-  color: ${(props) => props.theme.colors.darkBlue};
-`;
-
-const NewsSubscribeButton = styled.button`
-  width: fit-content;
-  margin-top: 2.5em;
-  font-size: 1.1rem;
-  font-weight: bold;
-  color: white;
-  padding: 1em 1.6em;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  background-color: ${(props) => props.theme.colors.darkBlueBtn};
-  &:hover {
-    background-color: ${(props) => props.theme.hover.darkBlueBtn};
-  }
-`;
-
-const NewsImgWrapper = styled.img`
-  padding-top: 1.5em;
-  object-fit: cover;
-`;
-
 const Home = ({ globalData }) => {
   const [page, setPage] = useState(1);
   const [perPage, setPerPage] = useState(20);
   const [marketData, setMarketData] = useState([]);
 
   const formatMarketCap = (number) => (number / 1e12).toFixed(2);
+
+  const formatCoinPrice = (price) => {
+    return price.toLocaleString(undefined, {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
+  };
 
   const colorizeMarketCap = (data) => {
     data = data.toFixed(1);
@@ -213,20 +163,22 @@ const Home = ({ globalData }) => {
             Today's Cryptocurrency Prices by Market Cap
           </InformationTitle>
           <InformationDescription>
-            The global crypto market cap is
-            {globalData &&
-              globalData.total_market_cap &&
-              globalData.total_market_cap.usd && (
-                <StyledSpan $bold="bold">
-                  &nbsp;${formatMarketCap(globalData.total_market_cap.usd)}T
-                </StyledSpan>
-              )}
-            , a&nbsp;
-            {globalData.market_cap_change_percentage_24h_usd &&
-              colorizeMarketCap(
-                globalData.market_cap_change_percentage_24h_usd
-              )}
-            &nbsp; over the last day.
+            <div>
+              The global crypto market cap is
+              {globalData &&
+                globalData.total_market_cap &&
+                globalData.total_market_cap.usd && (
+                  <StyledSpan $bold="bold">
+                    &nbsp;${formatMarketCap(globalData.total_market_cap.usd)}T
+                  </StyledSpan>
+                )}
+              , a&nbsp;
+              {globalData.market_cap_change_percentage_24h_usd &&
+                colorizeMarketCap(
+                  globalData.market_cap_change_percentage_24h_usd
+                )}
+              &nbsp; over the last day.
+            </div>
           </InformationDescription>
         </InformationPanel>
       </SubHeader>
@@ -259,7 +211,7 @@ const Home = ({ globalData }) => {
                   </TableCell>
                   <TableCell>
                     {coin.current_price
-                      ? `$${coin.current_price.toFixed(2)}`
+                      ? `$${formatCoinPrice(coin.current_price)}`
                       : "-"}
                   </TableCell>
                   <TableCell>
@@ -297,21 +249,7 @@ const Home = ({ globalData }) => {
         setPage={setPage}
         setPerPage={setPerPage}
       />
-      <CryptoNewsWrapper>
-        <CryptoNews>
-          <NewsLeftSideWrapper>
-            <NewsMainText>
-              Be the first to know about <span>crypto news every day</span>
-            </NewsMainText>
-            <NewsParagraph>
-              Get crypto analysis, news and updates right to your inbox! Sign up
-              here so you don't miss a single newsletter.
-            </NewsParagraph>
-            <NewsSubscribeButton>Subscribe Now</NewsSubscribeButton>
-          </NewsLeftSideWrapper>
-          {/* <NewsImgWrapper src={newsImg} /> */}
-        </CryptoNews>
-      </CryptoNewsWrapper>
+      <Newsletter />
     </Wrapper>
   );
 };
