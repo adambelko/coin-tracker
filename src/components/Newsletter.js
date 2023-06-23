@@ -12,11 +12,10 @@ const CryptoNews = styled.div`
   width: 87%;
   max-width: 1400px;
   margin: auto;
-  margin-top: 5em;
+  margin-top: 2em;
 
   @media (max-width: 1200px) {
     flex-direction: column;
-    margin-top: 4em;
   }
   @media (max-width: 675px) {
     width: 93%;
@@ -29,6 +28,9 @@ const NewsTextWrapper = styled.div`
   min-width: 50%;
   padding-left: 1em;
 
+  @media (max-width: 1200px) {
+    padding-left: 0;
+  }
   @media (max-width: 675px) {
     padding-left: 0;
     height: fit-content;
