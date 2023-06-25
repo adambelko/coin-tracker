@@ -3,11 +3,11 @@ import styled from "styled-components";
 
 import newsImg from "../images/newsletter_bg_light.svg";
 
-const CryptoNewsWrapper = styled.div`
+const NewsWrapper = styled.div`
   background-color: ${(props) => props.theme.colors.lightBlue};
 `;
 
-const CryptoNews = styled.div`
+const News = styled.div`
   display: flex;
   width: 87%;
   max-width: 1400px;
@@ -80,20 +80,25 @@ const NewsSubscribeButton = styled.button`
   }
 `;
 
-const ImgWrapper = styled.div`
-  display: flex;
-`;
-
 const NewsImgWrapper = styled.img`
   max-width: 100%;
   padding-top: 1.5em;
   object-fit: cover;
+
+  @media (max-width: 1200px) {
+    max-width: 80%;
+    margin: auto;
+  }
+
+  @media (max-width: 675px) {
+    max-width: 100%;
+  }
 `;
 
 const Newsletter = () => {
-  const newsLetter = (
-    <CryptoNewsWrapper>
-      <CryptoNews>
+  return (
+    <NewsWrapper>
+      <News>
         <NewsTextWrapper>
           <NewsMainText>
             Be the first to know about <span>crypto news every day</span>
@@ -105,11 +110,9 @@ const Newsletter = () => {
           <NewsSubscribeButton>Subscribe Now</NewsSubscribeButton>
         </NewsTextWrapper>
         <NewsImgWrapper src={newsImg} />
-      </CryptoNews>
-    </CryptoNewsWrapper>
+      </News>
+    </NewsWrapper>
   );
-
-  return <React.Fragment>{newsLetter}</React.Fragment>;
 };
 
 export default Newsletter;
