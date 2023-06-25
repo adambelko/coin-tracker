@@ -26,7 +26,6 @@ const Column = styled.div`
   display: flex;
   flex-direction: column;
   padding: 0 0.3em 2em 0.3em;
-  width: 25%;
 
   @media (max-width: 675px) {
     width: 50%;
