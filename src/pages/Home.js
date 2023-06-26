@@ -5,6 +5,7 @@ import axios from "axios";
 
 import { MdArrowDropDown, MdArrowDropUp } from "react-icons/md";
 
+import Dropdown from "../components/TableManager/Dropdown";
 import TableManager from "../components/TableManager/TableManager";
 import Newsletter from "../components/Newsletter";
 
@@ -13,6 +14,12 @@ const Wrapper = styled.div`
     rgb(248, 250, 255) 0%,
     rgba(248, 250, 253, 0) 200px
   );
+`;
+
+const SubWrapper = styled.div`
+  width: 87%;
+  max-width: 1400px;
+  margin: auto;
 `;
 
 const SubHeader = styled.section`
@@ -25,9 +32,6 @@ const InformationPanel = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.5em;
-  width: 87%;
-  max-width: 1400px;
-  margin: auto;
 `;
 
 const InformationTitle = styled.h2`
@@ -42,6 +46,7 @@ const InformationDescription = styled.p`
   div {
     display: flex;
     align-items: center;
+    padding-top: 0.5em;
   }
 `;
 
@@ -50,9 +55,7 @@ const TableWrapper = styled.div`
 `;
 
 const StyledTable = styled.table`
-  width: 87%;
-  max-width: 1400px;
-  margin: auto;
+  width: 100%;
   border-spacing: 0;
 `;
 
@@ -77,6 +80,12 @@ const TableCell = styled.td`
   white-space: nowrap;
   text-align: ${(props) => (props.textalign ? "start" : "end")};
   border-top: 1px solid ${(props) => props.theme.colors.greySecondary};
+`;
+
+const TopTableManager = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  padding-bottom: 1em;
 `;
 
 const StyledImage = styled.img`
@@ -130,7 +139,7 @@ const Home = ({ globalData }) => {
     if (data < 0)
       return (
         <StyledChange $bold="bold" red="true">
-          {Math.abs(data)}% <span>decrease</span>
+          {data}% <span>decrease</span>
         </StyledChange>
       );
     if (data > 0)
@@ -178,91 +187,98 @@ const Home = ({ globalData }) => {
 
   return (
     <Wrapper>
-      <ScrollToTop smooth />
-      <SubHeader>
-        <InformationPanel>
-          <InformationTitle>
-            Today's Cryptocurrency Prices by Market Cap
-          </InformationTitle>
-          <InformationDescription>
-            <div>
-              The global crypto market cap is
-              {globalData &&
-                globalData.total_market_cap &&
-                globalData.total_market_cap.usd && (
-                  <StyledSpan $bold="bold">
-                    &nbsp;${formatMarketCap(globalData.total_market_cap.usd)}T
-                  </StyledSpan>
-                )}
-              , a&nbsp;
-              {globalData.market_cap_change_percentage_24h_usd &&
-                colorizeMarketCap(
-                  globalData.market_cap_change_percentage_24h_usd
-                )}
-              &nbsp; over the last day.
-            </div>
-          </InformationDescription>
-        </InformationPanel>
-      </SubHeader>
-      <TableWrapper>
-        <StyledTable>
-          <thead>
-            <TableRow nobg="true">
-              <TableHeader textalign="true">#</TableHeader>
-              <TableHeader textalign="true">Name</TableHeader>
-              <TableHeader>Price</TableHeader>
-              <TableHeader>1h%</TableHeader>
-              <TableHeader>24h%</TableHeader>
-              <TableHeader>Market Cap</TableHeader>
-              <TableHeader>Circulating Supply</TableHeader>
-            </TableRow>
-          </thead>
-          <tbody>
-            {marketData &&
-              marketData.map((coin) => (
-                <TableRow key={coin.id}>
-                  <TableCell textalign="true">{coin.market_cap_rank}</TableCell>
-                  <TableCell textalign="true">
-                    <CellInnerWrapper>
-                      <StyledImage src={coin.image} />
-                      <StyledSpan $bold="bold">{coin.name}</StyledSpan>
-                      <StyledTicker>
-                        &nbsp;{coin.symbol.toUpperCase()}
-                      </StyledTicker>
-                    </CellInnerWrapper>
-                  </TableCell>
-                  <TableCell>
-                    {coin.current_price
-                      ? `$${formatCoinPrice(coin.current_price)}`
-                      : "-"}
-                  </TableCell>
-                  <TableCell>
-                    {coin.price_change_percentage_1h_in_currency
-                      ? colorizePercentageChange(
-                          coin.price_change_percentage_1h_in_currency
-                        )
-                      : "-"}
-                  </TableCell>
-                  <TableCell>
-                    {coin.price_change_percentage_24h
-                      ? colorizePercentageChange(
-                          coin.price_change_percentage_24h
-                        )
-                      : "-"}
-                  </TableCell>
-                  <TableCell>
-                    {coin.market_cap ? coin.market_cap.toLocaleString() : "-"}
-                  </TableCell>
-                  <TableCell>
-                    {coin.circulating_supply && coin.symbol
-                      ? `${coin.circulating_supply.toLocaleString()}  ${coin.symbol.toUpperCase()}`
-                      : "-"}
-                  </TableCell>
-                </TableRow>
-              ))}
-          </tbody>
-        </StyledTable>
-      </TableWrapper>
+      <SubWrapper>
+        <ScrollToTop smooth />
+        <SubHeader>
+          <InformationPanel>
+            <InformationTitle>
+              Today's Cryptocurrency Prices by Market Cap
+            </InformationTitle>
+            <InformationDescription>
+              <div>
+                The global crypto market cap is
+                {globalData &&
+                  globalData.total_market_cap &&
+                  globalData.total_market_cap.usd && (
+                    <StyledSpan $bold="bold">
+                      &nbsp;${formatMarketCap(globalData.total_market_cap.usd)}T
+                    </StyledSpan>
+                  )}
+                , a&nbsp;
+                {globalData.market_cap_change_percentage_24h_usd &&
+                  colorizeMarketCap(
+                    globalData.market_cap_change_percentage_24h_usd
+                  )}
+                &nbsp; over the last day
+              </div>
+            </InformationDescription>
+          </InformationPanel>
+        </SubHeader>
+        <TopTableManager>
+          <Dropdown perPage={perPage} setPerPage={setPerPage} />
+        </TopTableManager>
+        <TableWrapper>
+          <StyledTable>
+            <thead>
+              <TableRow nobg="true">
+                <TableHeader textalign="true">#</TableHeader>
+                <TableHeader textalign="true">Name</TableHeader>
+                <TableHeader>Price</TableHeader>
+                <TableHeader>1h%</TableHeader>
+                <TableHeader>24h%</TableHeader>
+                <TableHeader>Market Cap</TableHeader>
+                <TableHeader>Circulating Supply</TableHeader>
+              </TableRow>
+            </thead>
+            <tbody>
+              {marketData &&
+                marketData.map((coin) => (
+                  <TableRow key={coin.id}>
+                    <TableCell textalign="true">
+                      {coin.market_cap_rank}
+                    </TableCell>
+                    <TableCell textalign="true">
+                      <CellInnerWrapper>
+                        <StyledImage src={coin.image} />
+                        <StyledSpan $bold="bold">{coin.name}</StyledSpan>
+                        <StyledTicker>
+                          &nbsp;{coin.symbol.toUpperCase()}
+                        </StyledTicker>
+                      </CellInnerWrapper>
+                    </TableCell>
+                    <TableCell>
+                      {coin.current_price
+                        ? `$${formatCoinPrice(coin.current_price)}`
+                        : "-"}
+                    </TableCell>
+                    <TableCell>
+                      {coin.price_change_percentage_1h_in_currency
+                        ? colorizePercentageChange(
+                            coin.price_change_percentage_1h_in_currency
+                          )
+                        : "-"}
+                    </TableCell>
+                    <TableCell>
+                      {coin.price_change_percentage_24h
+                        ? colorizePercentageChange(
+                            coin.price_change_percentage_24h
+                          )
+                        : "-"}
+                    </TableCell>
+                    <TableCell>
+                      {coin.market_cap ? coin.market_cap.toLocaleString() : "-"}
+                    </TableCell>
+                    <TableCell>
+                      {coin.circulating_supply && coin.symbol
+                        ? `${coin.circulating_supply.toLocaleString()}  ${coin.symbol.toUpperCase()}`
+                        : "-"}
+                    </TableCell>
+                  </TableRow>
+                ))}
+            </tbody>
+          </StyledTable>
+        </TableWrapper>
+      </SubWrapper>
       <TableManager
         marketData={marketData}
         globalData={globalData}

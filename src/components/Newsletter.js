@@ -1,4 +1,3 @@
-import React from "react";
 import styled from "styled-components";
 
 import newsImg from "../images/newsletter_bg_light.svg";
@@ -26,7 +25,6 @@ const NewsTextWrapper = styled.div`
   display: flex;
   flex-direction: column;
   min-width: 50%;
-  padding-left: 1em;
 
   @media (max-width: 1200px) {
     padding-left: 0;

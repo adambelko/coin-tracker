@@ -5,14 +5,12 @@ import Pagination from "./Pagination";
 import Dropdown from "./Dropdown";
 
 const StyledTableManager = styled.div`
-  margin-top: 1em;
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 87%;
   max-width: 1400px;
   margin: auto;
-  border-top: 1px solid ${(props) => props.theme.colors.greySecondary};
 
   @media (max-width: 900px) {
     display: none;
@@ -34,12 +32,16 @@ const StyledTableManagerMobile = styled(StyledTableManager)`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 93%;
+    width: 87%;
   }
 
   @media (min-width: 900px) {
     display: none;
   }
+`;
+
+const DropdownWrapper = styled.div`
+  margin-top: 1em;
 `;
 
 const StyledSpan = styled.span`
@@ -60,8 +62,17 @@ const Credit = styled.div`
     border-bottom: 1px solid ${(props) => props.theme.colors.greySecondary};
   }
 
+  a {
+    color: ${(props) => props.theme.colors.darkBlue};
+    text-decoration: none;
+  }
+
+  a:hover {
+    color: ${(props) => props.theme.colors.blue};
+  }
+
   @media (max-width: 900px) {
-    width: 93%;
+    width: 87%;
   }
 `;
 
@@ -69,15 +80,30 @@ const TableManager = (props) => {
   const { marketData, globalData, page, setPage, perPage, setPerPage } = props;
 
   const tableManager = (
-    <React.Fragment>
-      <StyledTableManager>
-        <StyledSpan>
-          {marketData && marketData.length > 0
-            ? `Showing ${marketData[0].market_cap_rank} - ${
-                marketData[0].market_cap_rank + perPage - 1
-              } out of ${globalData.active_cryptocurrencies}`
-            : "Loading..."}
-        </StyledSpan>
+    <StyledTableManager>
+      <StyledSpan>
+        {marketData && marketData.length > 0
+          ? `Showing ${marketData[0].market_cap_rank} - ${
+              marketData[0].market_cap_rank + perPage - 1
+            } out of ${globalData.active_cryptocurrencies}`
+          : "Loading..."}
+      </StyledSpan>
+      <Pagination
+        page={page}
+        setPage={setPage}
+        perPage={perPage}
+        totalCoinsNumber={globalData.active_cryptocurrencies}
+        marketData={marketData}
+      />
+      <DropdownWrapper>
+        <Dropdown perPage={perPage} setPerPage={setPerPage} />
+      </DropdownWrapper>
+    </StyledTableManager>
+  );
+
+  const tableManagerMobile = (
+    <StyledTableManagerMobile>
+      <div className="top-wrapper">
         <Pagination
           page={page}
           setPage={setPage}
@@ -85,35 +111,20 @@ const TableManager = (props) => {
           totalCoinsNumber={globalData.active_cryptocurrencies}
           marketData={marketData}
         />
-        <Dropdown perPage={perPage} setPerPage={setPerPage} />
-      </StyledTableManager>
-    </React.Fragment>
-  );
-
-  const tableManagerMobile = (
-    <React.Fragment>
-      <StyledTableManagerMobile>
-        <div className="top-wrapper">
-          <Pagination
-            page={page}
-            setPage={setPage}
-            perPage={perPage}
-            totalCoinsNumber={globalData.active_cryptocurrencies}
-            marketData={marketData}
-          />
-        </div>
-        <div className="bottom-wrapper">
-          <StyledSpan>
-            {marketData && marketData.length > 0
-              ? `Showing ${marketData[0].market_cap_rank} - ${
-                  marketData[0].market_cap_rank + perPage - 1
-                } out of ${globalData.active_cryptocurrencies}`
-              : "Loading..."}
-          </StyledSpan>
+      </div>
+      <div className="bottom-wrapper">
+        <StyledSpan>
+          {marketData && marketData.length > 0
+            ? `Showing ${marketData[0].market_cap_rank} - ${
+                marketData[0].market_cap_rank + perPage - 1
+              } out of ${globalData.active_cryptocurrencies}`
+            : "Loading..."}
+        </StyledSpan>
+        <DropdownWrapper>
           <Dropdown perPage={perPage} setPerPage={setPerPage} />
-        </div>
-      </StyledTableManagerMobile>
-    </React.Fragment>
+        </DropdownWrapper>{" "}
+      </div>
+    </StyledTableManagerMobile>
   );
 
   return (
@@ -121,7 +132,7 @@ const TableManager = (props) => {
       {tableManager}
       {tableManagerMobile}
       <Credit>
-        Data provided by CoinGecko
+        Data provided by <a href="https://www.coingecko.com/">CoinGecko</a>
         <div></div>
       </Credit>
     </React.Fragment>

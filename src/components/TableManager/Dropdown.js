@@ -6,7 +6,6 @@ const Wrapper = styled.div`
   display: flex;
   align-items: center;
   gap: 0.5em;
-  margin-top: 1em;
 `;
 
 const SubWrapper = styled.div`
