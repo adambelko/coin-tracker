@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { MdArrowDropDown, MdArrowDropUp } from "react-icons/md";
 
 const TopbarWrapper = styled.div`
   display: flex;
@@ -31,25 +32,44 @@ const RightWrapper = styled.div`
 
 const StyledElement = styled.div`
   display: flex;
+  align-items: center;
   color: ${(props) => props.theme.colors.grey};
   cursor: ${(props) => (props.pointer ? "pointer" : "auto")};
 `;
 
 const StyledValue = styled.div`
   display: flex;
+  align-items: center;
   color: ${(props) => props.theme.colors.blue};
   cursor: pointer;
 `;
 
+const Wrapper = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
 const StyledChange = styled.span`
-  color: ${(props) => (props.red ? "red" : "green")};
+  color: ${(props) => (props.red ? "red" : props.theme.colors.green)};
 `;
 
 const Topbar = ({ data }) => {
   const colorize = (data) => {
     data = data.toFixed(1);
-    if (data < 0) return <StyledChange red="true">{data}%</StyledChange>;
-    if (data > 0) return <StyledChange>{data}%</StyledChange>;
+    if (data < 0)
+      return (
+        <Wrapper>
+          <MdArrowDropDown size="17px" color="red" />
+          <StyledChange red="true">{Math.abs(data)}%</StyledChange>
+        </Wrapper>
+      );
+    if (data > 0)
+      return (
+        <Wrapper>
+          <MdArrowDropUp size="17px" />
+          <StyledChange>{data}%</StyledChange>
+        </Wrapper>
+      );
     return <StyledValue>{data}%</StyledValue>;
   };
 

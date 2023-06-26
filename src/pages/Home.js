@@ -3,6 +3,8 @@ import ScrollToTop from "react-scroll-to-top";
 import styled from "styled-components";
 import axios from "axios";
 
+import { MdArrowDropDown, MdArrowDropUp } from "react-icons/md";
+
 import TableManager from "../components/TableManager/TableManager";
 import Newsletter from "../components/Newsletter";
 
@@ -36,6 +38,11 @@ const InformationTitle = styled.h2`
 const InformationDescription = styled.p`
   display: flex;
   color: ${(props) => props.theme.colors.darkBlue};
+
+  div {
+    display: flex;
+    align-items: center;
+  }
 `;
 
 const TableWrapper = styled.div`
@@ -66,8 +73,7 @@ const TableRow = styled.tr`
 
 const TableCell = styled.td`
   padding: 1.8em 1em;
-  font-size: 0.9rem;
-  color: ${(props) => props.theme.colors.darkBlue};
+  color: "#ffffff";
   white-space: nowrap;
   text-align: ${(props) => (props.textalign ? "start" : "end")};
   border-top: 1px solid ${(props) => props.theme.colors.greySecondary};
@@ -91,8 +97,14 @@ const StyledSpan = styled.span`
   }
 `;
 
+const ChangeWrapper = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+`;
+
 const StyledChange = styled(StyledSpan)`
-  color: ${(props) => (props.red ? "red" : "green")};
+  color: ${(props) => (props.red ? "red" : props.theme.colors.green)};
 `;
 
 const StyledTicker = styled.span`
@@ -114,11 +126,11 @@ const Home = ({ globalData }) => {
   };
 
   const colorizeMarketCap = (data) => {
-    data = data.toFixed(1);
+    data = data.toFixed(2);
     if (data < 0)
       return (
         <StyledChange $bold="bold" red="true">
-          {data}% <span>decrease</span>
+          {Math.abs(data)}% <span>decrease</span>
         </StyledChange>
       );
     if (data > 0)
@@ -135,11 +147,21 @@ const Home = ({ globalData }) => {
   };
 
   const colorizePercentageChange = (data) => {
-    if (data < 0) {
-      return <StyledChange red="true">{data}%</StyledChange>;
-    } else {
-      return <StyledChange>{data}%</StyledChange>;
-    }
+    data = data.toFixed(2);
+    if (data < 0)
+      return (
+        <ChangeWrapper>
+          <MdArrowDropDown size="20px" color="red" />
+          <StyledChange red="true">{Math.abs(data)}%</StyledChange>
+        </ChangeWrapper>
+      );
+    if (data >= 0)
+      return (
+        <ChangeWrapper>
+          <MdArrowDropUp size="20px" color="#18C785" />
+          <StyledChange>{data}%</StyledChange>
+        </ChangeWrapper>
+      );
   };
 
   const marketAPI = `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=${perPage}&page=${page}&sparkline=false&price_change_percentage=1h%2C%207d%2C&locale=en`;
@@ -217,14 +239,14 @@ const Home = ({ globalData }) => {
                   <TableCell>
                     {coin.price_change_percentage_1h_in_currency
                       ? colorizePercentageChange(
-                          coin.price_change_percentage_1h_in_currency.toFixed(2)
+                          coin.price_change_percentage_1h_in_currency
                         )
                       : "-"}
                   </TableCell>
                   <TableCell>
                     {coin.price_change_percentage_24h
                       ? colorizePercentageChange(
-                          coin.price_change_percentage_24h.toFixed(2)
+                          coin.price_change_percentage_24h
                         )
                       : "-"}
                   </TableCell>
