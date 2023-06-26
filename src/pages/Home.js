@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Sparklines, SparklinesLine } from "react-sparklines";
 import ScrollToTop from "react-scroll-to-top";
 import styled from "styled-components";
 import axios from "axios";
@@ -80,6 +81,11 @@ const TableCell = styled.td`
   white-space: nowrap;
   text-align: ${(props) => (props.textalign ? "start" : "end")};
   border-top: 1px solid ${(props) => props.theme.colors.greySecondary};
+`;
+
+const TableChartCell = styled(TableCell)`
+  width: 150px;
+  padding: 0 0.5em;
 `;
 
 const TopTableManager = styled.div`
@@ -173,7 +179,7 @@ const Home = ({ globalData }) => {
       );
   };
 
-  const marketAPI = `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=${perPage}&page=${page}&sparkline=false&price_change_percentage=1h%2C%207d%2C&locale=en`;
+  const marketAPI = `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=${perPage}&page=${page}&sparkline=true&price_change_percentage=1h%2C24h%2C7d&locale=en`;
 
   useEffect(() => {
     axios
@@ -183,7 +189,6 @@ const Home = ({ globalData }) => {
   }, [page, perPage]);
 
   console.log(marketData);
-  // console.log(globalData);
 
   return (
     <Wrapper>
@@ -224,10 +229,12 @@ const Home = ({ globalData }) => {
                 <TableHeader textalign="true">#</TableHeader>
                 <TableHeader textalign="true">Name</TableHeader>
                 <TableHeader>Price</TableHeader>
-                <TableHeader>1h%</TableHeader>
-                <TableHeader>24h%</TableHeader>
+                <TableHeader>1h %</TableHeader>
+                <TableHeader>24h %</TableHeader>
+                <TableHeader>7d %</TableHeader>
                 <TableHeader>Market Cap</TableHeader>
                 <TableHeader>Circulating Supply</TableHeader>
+                <TableHeader>Last 7 Days</TableHeader>
               </TableRow>
             </thead>
             <tbody>
@@ -266,13 +273,27 @@ const Home = ({ globalData }) => {
                         : "-"}
                     </TableCell>
                     <TableCell>
-                      {coin.market_cap ? coin.market_cap.toLocaleString() : "-"}
+                      {coin.price_change_percentage_24h
+                        ? colorizePercentageChange(
+                            coin.price_change_percentage_7d_in_currency
+                          )
+                        : "-"}
+                    </TableCell>
+                    <TableCell>
+                      {coin.market_cap
+                        ? `$${coin.market_cap.toLocaleString()}`
+                        : "-"}
                     </TableCell>
                     <TableCell>
                       {coin.circulating_supply && coin.symbol
                         ? `${coin.circulating_supply.toLocaleString()}  ${coin.symbol.toUpperCase()}`
                         : "-"}
                     </TableCell>
+                    <TableChartCell>
+                      <Sparklines data={coin.sparkline_in_7d.price}>
+                        <SparklinesLine color="blue" />
+                      </Sparklines>
+                    </TableChartCell>
                   </TableRow>
                 ))}
             </tbody>
