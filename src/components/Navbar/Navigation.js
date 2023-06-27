@@ -53,7 +53,7 @@ const Navigation = () => {
         <NavigationLink to="/">
           <WebsiteName>Crypto Tracker</WebsiteName>
         </NavigationLink>
-        <NavigationLink to="/cryptocurrencies">
+        <NavigationLink to="/">
           <ListItem>Cryptocurrencies</ListItem>
         </NavigationLink>
         <NavigationLink to="news">

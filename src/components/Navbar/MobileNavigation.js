@@ -103,7 +103,7 @@ const MobileNavigation = () => {
           {openMenu ? closeIcon : menuIcon}
           {openMenu && (
             <List>
-              <NavigationLink to="/cryptocurrencies">
+              <NavigationLink to="/">
                 <ListItem>Cryptocurrencies</ListItem>
               </NavigationLink>
               <NavigationLink to="news">

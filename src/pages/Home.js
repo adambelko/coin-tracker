@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Sparklines, SparklinesLine } from "react-sparklines";
-import ScrollToTop from "react-scroll-to-top";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
 
@@ -85,7 +85,7 @@ const TableCell = styled.td`
 
 const TableChartCell = styled(TableCell)`
   width: 150px;
-  padding: 0 0.5em;
+  padding: 0 0.5em 0 1em;
 `;
 
 const TopTableManager = styled.div`
@@ -124,6 +124,14 @@ const StyledChange = styled(StyledSpan)`
 
 const StyledTicker = styled.span`
   color: ${(props) => props.theme.colors.darkBlue};
+`;
+
+const StyledLink = styled(Link)`
+  display: flex;
+  align-items: center;
+  color: ${(props) => props.theme.colors.darkBlue};
+  text-decoration: none;
+  cursor: pointer;
 `;
 
 const Home = ({ globalData }) => {
@@ -193,7 +201,6 @@ const Home = ({ globalData }) => {
   return (
     <Wrapper>
       <SubWrapper>
-        <ScrollToTop smooth />
         <SubHeader>
           <InformationPanel>
             <InformationTitle>
@@ -246,11 +253,13 @@ const Home = ({ globalData }) => {
                     </TableCell>
                     <TableCell textalign="true">
                       <CellInnerWrapper>
-                        <StyledImage src={coin.image} />
-                        <StyledSpan $bold="bold">{coin.name}</StyledSpan>
-                        <StyledTicker>
-                          &nbsp;{coin.symbol.toUpperCase()}
-                        </StyledTicker>
+                        <StyledLink to={"/currencies/" + coin.id}>
+                          <StyledImage src={coin.image} />
+                          <StyledSpan $bold="bold">{coin.name}</StyledSpan>
+                          <StyledTicker>
+                            &nbsp;{coin.symbol.toUpperCase()}
+                          </StyledTicker>
+                        </StyledLink>
                       </CellInnerWrapper>
                     </TableCell>
                     <TableCell>
