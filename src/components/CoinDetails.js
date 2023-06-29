@@ -5,7 +5,7 @@ import styled from "styled-components";
 const Wrapper = styled.div`
   width: 87%;
   max-width: 1400px;
-  margin: auto;
+  margin: 0 auto;
 `;
 
 const Crumbs = styled.div`

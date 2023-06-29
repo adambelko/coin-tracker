@@ -8,6 +8,7 @@ import CoinDetails from "./CoinDetails";
 const StyledMain = styled.main`
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
 `;
 
 const Main = ({ globalData, formatCoinPrice }) => {
