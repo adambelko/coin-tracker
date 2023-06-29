@@ -253,7 +253,7 @@ const Home = ({ globalData }) => {
                     </TableCell>
                     <TableCell textalign="true">
                       <CellInnerWrapper>
-                        <StyledLink to={"/currencies/" + coin.id}>
+                        <StyledLink to={"/currencies/" + coin.id} state={coin}>
                           <StyledImage src={coin.image} />
                           <StyledSpan $bold="bold">{coin.name}</StyledSpan>
                           <StyledTicker>
