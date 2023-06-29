@@ -10,17 +10,25 @@ const StyledMain = styled.main`
   flex-direction: column;
 `;
 
-const Main = ({ globalData }) => {
+const Main = ({ globalData, formatCoinPrice }) => {
   return (
     <StyledMain>
       <ScrollToTop smooth />
       <Routes>
         <Route to="/">
-          <Route index element={<Home globalData={globalData} />} />
+          <Route
+            index
+            element={
+              <Home globalData={globalData} formatCoinPrice={formatCoinPrice} />
+            }
+          />
         </Route>
         <Route to="/news">{/* <Route index element={} /> */}</Route>
         <Route to="/portfolio">{/* <Route index element={} /> */}</Route>
-        <Route path="/currencies/:id" element={<CoinDetails />}></Route>
+        <Route
+          path="/currencies/:id"
+          element={<CoinDetails formatCoinPrice={formatCoinPrice} />}
+        ></Route>
       </Routes>
     </StyledMain>
   );

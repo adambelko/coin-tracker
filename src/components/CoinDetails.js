@@ -66,15 +66,34 @@ const StyledTicker = styled.span`
 
 const CoinPriceWrapper = styled.div`
   display: flex;
+  align-items: center;
+  margin-top: 0.6em;
+  gap: 0.5em;
 `;
 
 const CoinPrice = styled.span`
-  font-size: 2rem;
+  font-size: 2.2rem;
   font-weight: bold;
 `;
 
-const CoinDetails = () => {
+const CoinPercentageChange = styled.span`
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: ${(props) => (props.red ? "red" : props.theme.colors.green)};
+`;
+
+const CoinDetails = ({ formatCoinPrice }) => {
   const coin = useLocation();
+
+  const colorizePercentageChange = (data) => {
+    data = data.toFixed(2);
+    if (data >= 0) {
+      return <CoinPercentageChange>{data}%</CoinPercentageChange>;
+    } else {
+      return <CoinPercentageChange red="true">{data}%</CoinPercentageChange>;
+    }
+  };
+
   console.log(coin);
   return (
     <Wrapper>
@@ -91,7 +110,8 @@ const CoinDetails = () => {
           <StyledTicker>{coin.state.symbol.toUpperCase()}</StyledTicker>
         </ImgNameTickerWrapper>
         <CoinPriceWrapper>
-          <CoinPrice>${coin.state.current_price}</CoinPrice>
+          <CoinPrice>${formatCoinPrice(coin.state.current_price)}</CoinPrice>
+          {colorizePercentageChange(coin.state.price_change_percentage_24h)}
         </CoinPriceWrapper>
       </CoinInfoWrapper>
     </Wrapper>

@@ -134,19 +134,12 @@ const StyledLink = styled(Link)`
   cursor: pointer;
 `;
 
-const Home = ({ globalData }) => {
+const Home = ({ globalData, formatCoinPrice }) => {
   const [page, setPage] = useState(1);
   const [perPage, setPerPage] = useState(20);
   const [marketData, setMarketData] = useState([]);
 
   const formatMarketCap = (number) => (number / 1e12).toFixed(2);
-
-  const formatCoinPrice = (price) => {
-    return price.toLocaleString(undefined, {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    });
-  };
 
   const colorizeMarketCap = (data) => {
     data = data.toFixed(2);
