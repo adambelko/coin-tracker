@@ -15,13 +15,10 @@ const ChartManager = styled.div`
   display: flex;
   justify-content: space-between;
   margin-right: 0.9em;
+  margin-bottom: 0.7em;
 `;
 
 const ChartContentBar = styled.div`
-  width: 200px;
-  background: ${(props) => props.theme.colors.greySecondary};
-`;
-const TimeIntervalBar = styled.div`
   display: flex;
   flex-flow: row nowrap;
   align-items: center;
@@ -36,14 +33,22 @@ const TimeIntervalBar = styled.div`
     cursor: pointer;
 
     li {
-      padding: 0.4em 0.6em;
+      padding: 0.4em 6em;
       white-space: nowrap;
       border-radius: 6px;
-      &:hover {
-        background-color: #f8fafd;
-      }
       &.active {
         background-color: #ffffff;
+      }
+    }
+  }
+`;
+
+const TimeIntervalBar = styled(ChartContentBar)`
+  ul {
+    li {
+      padding: 0.4em 0.6em;
+      &:hover {
+        background-color: #f8fafd;
       }
     }
   }
@@ -52,20 +57,25 @@ const TimeIntervalBar = styled.div`
 const LineChart = ({ coin }) => {
   const [chartData, setChartData] = useState();
   const [timeInterval, setTimeInterval] = useState(30);
+  const [chartInterval, setChartInterval] = useState("daily");
   const [activeInterval, setActiveInterval] = useState(30);
+  const [priceChartContent, setPriceChartContent] = useState(true);
+
   const coinTimeStamp = [];
   const coinPrice = [];
+  const marketCapTimeStamp = [];
+  const marketCapPrice = [];
 
-  const chartDataAPI = `https://api.coingecko.com/api/v3/coins/${coin.id}/market_chart?vs_currency=usd&days=${timeInterval}&interval=daily&precision=full`;
+  const chartDataAPI = `https://api.coingecko.com/api/v3/coins/${coin.id}/market_chart?vs_currency=usd&days=${timeInterval}&interval=${chartInterval}&precision=full`;
 
   useEffect(() => {
     axios
       .get(chartDataAPI)
       .then((response) => setChartData(response.data))
       .catch((error) => console.log(error));
-  }, [timeInterval]);
+  }, [priceChartContent, timeInterval, chartInterval]);
 
-  const data = {
+  const priceData = {
     labels: coinTimeStamp,
     datasets: [
       {
@@ -78,20 +88,61 @@ const LineChart = ({ coin }) => {
     ],
   };
 
+  const marketCapData = {
+    labels: marketCapTimeStamp,
+    datasets: [
+      {
+        label: "Price In USD",
+        data: marketCapPrice,
+        fill: false,
+        backgroundColor: "#4789f7",
+        borderColor: "#4789f7",
+      },
+    ],
+  };
+
   chartData?.prices?.forEach((data) => {
     coinTimeStamp.push(new Date(data[0]).toLocaleDateString());
     coinPrice.push(data[1].toFixed(1));
   });
 
+  chartData?.market_caps?.forEach((data) => {
+    marketCapTimeStamp.push(new Date(data[0]).toLocaleDateString());
+    marketCapPrice.push(data[1].toFixed(3));
+  });
+
   const handleTimeIntervalClick = (interval) => {
+    if (interval === 1 || interval === 7) {
+      setChartInterval("hourly");
+    } else {
+      setChartInterval("daily");
+    }
+
     setTimeInterval(interval);
     setActiveInterval(interval);
   };
 
+  console.log(chartData);
+
   return (
     <Wrapper>
       <ChartManager>
-        <ChartContentBar></ChartContentBar>
+        <ChartContentBar>
+          <ul>
+            <li
+              onClick={() => setPriceChartContent(true)}
+              className={priceChartContent ? "active" : ""}
+            >
+              Price
+            </li>
+            <li
+              onClick={() => setPriceChartContent(false)}
+              className={!priceChartContent ? "active" : ""}
+            >
+              Market Cap
+            </li>
+          </ul>
+        </ChartContentBar>
         <TimeIntervalBar>
           <ul>
             <li
@@ -127,7 +178,11 @@ const LineChart = ({ coin }) => {
           </ul>
         </TimeIntervalBar>
       </ChartManager>
-      <Line data={data} />
+      {priceChartContent ? (
+        <Line data={priceData} />
+      ) : (
+        <Line data={marketCapData} />
+      )}
     </Wrapper>
   );
 };
