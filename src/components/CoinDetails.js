@@ -2,6 +2,8 @@ import { useLocation } from "react-router-dom";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
+import LineChart from "./LineChart";
+
 const Wrapper = styled.div`
   width: 87%;
   max-width: 1400px;
@@ -82,6 +84,10 @@ const CoinPercentageChange = styled.span`
   color: ${(props) => (props.red ? "red" : props.theme.colors.green)};
 `;
 
+const ChartWrapper = styled.div`
+  display: flex;
+`;
+
 const CoinDetails = ({ formatCoinPrice }) => {
   const coin = useLocation();
 
@@ -114,6 +120,9 @@ const CoinDetails = ({ formatCoinPrice }) => {
           {colorizePercentageChange(coin.state.price_change_percentage_24h)}
         </CoinPriceWrapper>
       </CoinInfoWrapper>
+      <ChartWrapper>
+        <LineChart />
+      </ChartWrapper>
     </Wrapper>
   );
 };
