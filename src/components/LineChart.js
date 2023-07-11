@@ -6,15 +6,47 @@ import { Chart as ChartJS } from "chart.js/auto";
 
 const Wrapper = styled.div`
   display: flex;
+  flex-direction: column;
+  max-width: 930px;
+  flex-grow: 1;
 `;
 
-const LineChart = () => {
+const ChartManager = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-right: 0.9em;
+`;
+
+const ChartContentBar = styled.div`
+  width: 200px;
+  background: ${(props) => props.theme.colors.greySecondary};
+`;
+const TimeIntervalBar = styled.div`
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  overflow: auto visible;
+  background: ${(props) => props.theme.colors.greySecondary};
+  border-radius: 6px;
+
+  ul {
+    display: flex;
+    list-style: none;
+    padding: 3px;
+
+    li {
+      padding: 0.4em 0.6em;
+      white-space: nowrap;
+    }
+  }
+`;
+
+const LineChart = ({ coin }) => {
   const [chartData, setChartData] = useState();
   const coinTimeStamp = [];
   const coinPrice = [];
 
-  const chartDataAPI =
-    "https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=7&interval=daily&precision=full";
+  const chartDataAPI = `https://api.coingecko.com/api/v3/coins/${coin.id}/market_chart?vs_currency=usd&days=30&interval=daily&precision=full`;
 
   useEffect(() => {
     axios
@@ -45,6 +77,18 @@ const LineChart = () => {
 
   return (
     <Wrapper>
+      <ChartManager>
+        <ChartContentBar></ChartContentBar>
+        <TimeIntervalBar>
+          <ul>
+            <li>1D</li>
+            <li>7D</li>
+            <li>1M</li>
+            <li>1Y</li>
+            <li>ALL</li>
+          </ul>
+        </TimeIntervalBar>
+      </ChartManager>
       <Line data={data} />
     </Wrapper>
   );

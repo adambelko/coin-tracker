@@ -84,12 +84,24 @@ const CoinPercentageChange = styled.span`
   color: ${(props) => (props.red ? "red" : props.theme.colors.green)};
 `;
 
-const ChartWrapper = styled.div`
+const InnerWrapper = styled.div`
   display: flex;
+  min-height: 600px;
+  margin-top: 3em;
+  gap: 0.5em;
+`;
+
+const CoinStats = styled.div`
+  display: flex;
+  width: 400px;
+  margin-top: 3.5em;
+  background: ${(props) => props.theme.colors.greySecondary};
+  border-radius: 15px;
 `;
 
 const CoinDetails = ({ formatCoinPrice }) => {
-  const coin = useLocation();
+  const coinData = useLocation();
+  const coin = coinData.state;
 
   const colorizePercentageChange = (data) => {
     data = data.toFixed(2);
@@ -106,23 +118,24 @@ const CoinDetails = ({ formatCoinPrice }) => {
       <Crumbs>
         <StyledCrumbLink to="/">Cryptocurrencies</StyledCrumbLink>
         {">"}
-        <StyledCrumbSpan>{coin.state.name}</StyledCrumbSpan>
+        <StyledCrumbSpan>{coin.name}</StyledCrumbSpan>
       </Crumbs>
       <CoinInfoWrapper>
-        <Rank>Rank #{coin.state.market_cap_rank}</Rank>
+        <Rank>Rank #{coin.market_cap_rank}</Rank>
         <ImgNameTickerWrapper>
-          <StyledCoinImg src={coin.state.image} />
-          <StyledName>{coin.state.name}</StyledName>
-          <StyledTicker>{coin.state.symbol.toUpperCase()}</StyledTicker>
+          <StyledCoinImg src={coin.image} />
+          <StyledName>{coin.name}</StyledName>
+          <StyledTicker>{coin.symbol.toUpperCase()}</StyledTicker>
         </ImgNameTickerWrapper>
         <CoinPriceWrapper>
-          <CoinPrice>${formatCoinPrice(coin.state.current_price)}</CoinPrice>
-          {colorizePercentageChange(coin.state.price_change_percentage_24h)}
+          <CoinPrice>${formatCoinPrice(coin.current_price)}</CoinPrice>
+          {colorizePercentageChange(coin.price_change_percentage_24h)}
         </CoinPriceWrapper>
       </CoinInfoWrapper>
-      <ChartWrapper>
-        <LineChart />
-      </ChartWrapper>
+      <InnerWrapper>
+        <LineChart coin={coin} />
+        <CoinStats></CoinStats>
+      </InnerWrapper>
     </Wrapper>
   );
 };
