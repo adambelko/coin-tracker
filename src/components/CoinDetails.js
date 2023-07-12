@@ -4,6 +4,7 @@ import styled from "styled-components";
 
 import LineChart from "./LineChart";
 import Converter from "./Converter";
+import TrendingCoins from "./TrendingCoins";
 
 const Wrapper = styled.div`
   width: 87%;
@@ -98,6 +99,7 @@ const InnerWrapper = styled.div`
 const WrapperChartConverter = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   flex-grow: 1;
 `;
 
@@ -260,6 +262,7 @@ const CoinDetails = ({ formatCoinPrice }) => {
           </CoinStats>
         </CoinStatsWrapper>
       </InnerWrapper>
+      <TrendingCoins />
     </Wrapper>
   );
 };
