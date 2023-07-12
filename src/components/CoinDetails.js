@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 import LineChart from "./LineChart";
+import Converter from "./Converter";
 
 const Wrapper = styled.div`
   width: 87%;
@@ -89,15 +90,21 @@ const CoinPercentageChange = styled.span`
 
 const InnerWrapper = styled.div`
   display: flex;
-  min-height: 600px;
+  justify-content: space-between;
   margin-top: 3em;
   gap: 0.5em;
+`;
+
+const WrapperChartConverter = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
 `;
 
 const CoinStatsWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  width: 400px;
+  width: 420px;
 `;
 
 const CoinStatHeader = styled.div`
@@ -109,7 +116,7 @@ const CoinStats = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 0.7em;
-  padding: 2em;
+  padding: 2.5em;
   background: #f8fafd;
   border-radius: 15px;
   font-size: 0.9rem;
@@ -156,6 +163,7 @@ const CoinDetails = ({ formatCoinPrice }) => {
   };
 
   console.log(coin);
+
   return (
     <Wrapper>
       <Crumbs>
@@ -178,7 +186,10 @@ const CoinDetails = ({ formatCoinPrice }) => {
         </CoinPriceWrapper>
       </CoinInfoWrapper>
       <InnerWrapper>
-        <LineChart coin={coin} />
+        <WrapperChartConverter>
+          <LineChart coin={coin} />
+          <Converter coin={coin} />
+        </WrapperChartConverter>
         <CoinStatsWrapper>
           <CoinStatHeader>
             {coin.symbol.toUpperCase()} Price Statistics

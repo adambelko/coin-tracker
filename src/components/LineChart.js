@@ -8,7 +8,6 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   max-width: 930px;
-  flex-grow: 1;
 `;
 
 const ChartManager = styled.div`
