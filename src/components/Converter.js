@@ -1,9 +1,10 @@
+import { useState } from "react";
 import styled from "styled-components";
 
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  margin-top: 1.5em;
+  margin-top: 1.3em;
   width: 97%;
 `;
 
@@ -54,8 +55,10 @@ const CurrencyWrapper = styled.div`
   }
 
   input {
+    font-weight: bold;
     display: flex;
-    font-size: 1.7em;
+    font-size: 1.5em;
+    padding: 0.3em;
     text-align: end;
     width: 100%;
     background: transparent;
@@ -76,6 +79,21 @@ const Currency = styled.p`
 `;
 
 const Converter = ({ coin }) => {
+  const [coinPrice, setCoinPrice] = useState(1);
+  const [usdPrice, setUSDPrice] = useState(coin.current_price.toFixed(2));
+
+  const handleConversion = (e, fromCoin) => {
+    const value = parseFloat(e.target.value);
+
+    if (fromCoin) {
+      setCoinPrice(value);
+      setUSDPrice((value * coin.current_price).toFixed(2));
+    } else {
+      setUSDPrice(value);
+      setCoinPrice((value / coin.current_price).toFixed(6));
+    }
+  };
+
   return (
     <Wrapper>
       <ConverterHeader>
@@ -89,7 +107,12 @@ const Converter = ({ coin }) => {
               <Ticker>{coin.symbol.toUpperCase()}</Ticker>
               <Currency>{coin.name}</Currency>
             </div>
-            <input type="number" />
+            <input
+              type="number"
+              min="0"
+              value={coinPrice}
+              onChange={(e) => handleConversion(e, true)}
+            />
           </CurrencyWrapper>
         </InnerWrapper>
         <InnerWrapper $bg="true">
@@ -102,7 +125,12 @@ const Converter = ({ coin }) => {
               <Ticker>USD</Ticker>
               <Currency>United States Dollar</Currency>
             </div>
-            <input type="number" />
+            <input
+              type="number"
+              min="0"
+              value={usdPrice}
+              onChange={(e) => handleConversion(e, false)}
+            />
           </CurrencyWrapper>
         </InnerWrapper>
         <ConverterImage src="https://s2.coinmarketcap.com/static/cloud/img/converter.png?_=8b517e5" />
