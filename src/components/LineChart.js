@@ -33,6 +33,7 @@ const ChartContentBar = styled.div`
     cursor: pointer;
 
     li {
+      color: #616e85;
       padding: 0.4em 6em;
       white-space: nowrap;
       border-radius: 6px;
@@ -121,8 +122,6 @@ const LineChart = ({ coin }) => {
     setTimeInterval(interval);
     setActiveInterval(interval);
   };
-
-  console.log(chartData);
 
   return (
     <Wrapper>
