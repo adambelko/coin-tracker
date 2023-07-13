@@ -27,7 +27,6 @@ const ConverterImage = styled.img`
   top: 50%;
   width: 35px;
   transform: translate(-50%, -50%);
-  cursor: pointer;
 `;
 
 const InnerWrapper = styled.div`
