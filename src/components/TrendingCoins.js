@@ -78,7 +78,7 @@ const TrendingCoins = () => {
   const fetchCoinDetails = (coinId) => {
     axios
       .get(
-        `https://api.coingecko.com/api/v3/coins/${coinId}?tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=true`
+        `https://api.coingecko.com/api/v3/coins/${coinId}?tickers=true&market_data=true&community_data=false&developer_data=false&sparkline=true`
       )
       .then((response) => {
         setCoinDetails((prevCoinDetails) => ({
@@ -97,8 +97,6 @@ const TrendingCoins = () => {
     }
   }, [trendingCoins]);
 
-  console.log(coinDetails.apecoin);
-  console.log(trendingCoins);
   return (
     <Wrapper>
       <Title>Trending Coins</Title>
@@ -107,27 +105,30 @@ const TrendingCoins = () => {
           trendingCoins.coins &&
           trendingCoins.coins.map((coin) => {
             return (
-              <TrendingCoin key={coin.item.id}>
-                <TopWrapper>
-                  <img src={coin.item.small} alt="coin" />
-                  <div>
-                    <CoinName>{coin.item.name}</CoinName>
-                    <CoinPrice>
-                      $
-                      {coinDetails[
-                        coin.item.id
-                      ]?.market_data?.current_price?.usd?.toFixed(2)}
-                    </CoinPrice>
-                  </div>
-                </TopWrapper>
-                <Sparklines
-                  data={
-                    coinDetails[coin.item.id]?.market_data?.sparkline_7d?.price
-                  }
-                >
-                  <SparklinesLine color="#4789f7" />
-                </Sparklines>
-              </TrendingCoin>
+              <Link to={"/currencies/" + coin.item.id} state={coin.item.id}>
+                <TrendingCoin key={coin.item.id}>
+                  <TopWrapper>
+                    <img src={coin.item.small} alt="coin" />
+                    <div>
+                      <CoinName>{coin.item.name}</CoinName>
+                      <CoinPrice>
+                        $
+                        {coinDetails[
+                          coin.item.id
+                        ]?.market_data?.current_price?.usd?.toFixed(2)}
+                      </CoinPrice>
+                    </div>
+                  </TopWrapper>
+                  <Sparklines
+                    data={
+                      coinDetails[coin.item.id]?.market_data?.sparkline_7d
+                        ?.price
+                    }
+                  >
+                    <SparklinesLine color="#4789f7" />
+                  </Sparklines>
+                </TrendingCoin>
+              </Link>
             );
           })}
       </CoinList>

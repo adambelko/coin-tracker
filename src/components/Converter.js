@@ -79,17 +79,19 @@ const Currency = styled.p`
 
 const Converter = ({ coin }) => {
   const [coinPrice, setCoinPrice] = useState(1);
-  const [usdPrice, setUSDPrice] = useState(coin.current_price.toFixed(2));
+  const [usdPrice, setUSDPrice] = useState(
+    coin.market_data.current_price.usd.toFixed(2)
+  );
 
   const handleConversion = (e, fromCoin) => {
     const value = parseFloat(e.target.value);
 
     if (fromCoin) {
       setCoinPrice(value);
-      setUSDPrice((value * coin.current_price).toFixed(2));
+      setUSDPrice((value * coin.market_data.current_price).toFixed(2));
     } else {
       setUSDPrice(value);
-      setCoinPrice((value / coin.current_price).toFixed(6));
+      setCoinPrice((value / coin.market_data.current_price).toFixed(6));
     }
   };
 
@@ -101,7 +103,7 @@ const Converter = ({ coin }) => {
       <ConverterBody>
         <InnerWrapper>
           <CurrencyWrapper>
-            <img src={coin.image} alt="coin" />
+            <img src={coin.image.small} alt="coin" />
             <div>
               <Ticker>{coin.symbol.toUpperCase()}</Ticker>
               <Currency>{coin.name}</Currency>

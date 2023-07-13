@@ -54,7 +54,7 @@ const TimeIntervalBar = styled(ChartContentBar)`
   }
 `;
 
-const LineChart = ({ coin }) => {
+const LineChart = ({ coinId }) => {
   const [chartData, setChartData] = useState();
   const [timeInterval, setTimeInterval] = useState(30);
   const [chartInterval, setChartInterval] = useState("daily");
@@ -66,14 +66,14 @@ const LineChart = ({ coin }) => {
   const marketCapTimeStamp = [];
   const marketCapPrice = [];
 
-  const chartDataAPI = `https://api.coingecko.com/api/v3/coins/${coin.id}/market_chart?vs_currency=usd&days=${timeInterval}&interval=${chartInterval}&precision=full`;
+  const chartDataAPI = `https://api.coingecko.com/api/v3/coins/${coinId}/market_chart?vs_currency=usd&days=${timeInterval}&interval=${chartInterval}&precision=full`;
 
   useEffect(() => {
     axios
       .get(chartDataAPI)
       .then((response) => setChartData(response.data))
       .catch((error) => console.log(error));
-  }, [priceChartContent, timeInterval, chartInterval]);
+  }, [coinId, priceChartContent, timeInterval, chartInterval]);
 
   const priceData = {
     labels: coinTimeStamp,

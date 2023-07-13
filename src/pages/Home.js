@@ -189,8 +189,6 @@ const Home = ({ globalData, formatCoinPrice }) => {
       .catch((error) => console.log(error));
   }, [page, perPage]);
 
-  console.log(marketData);
-
   return (
     <Wrapper>
       <SubWrapper>
@@ -246,7 +244,10 @@ const Home = ({ globalData, formatCoinPrice }) => {
                     </TableCell>
                     <TableCell textalign="true">
                       <CellInnerWrapper>
-                        <StyledLink to={"/currencies/" + coin.id} state={coin}>
+                        <StyledLink
+                          to={"/currencies/" + coin.id}
+                          state={coin.id}
+                        >
                           <StyledImage src={coin.image} />
                           <StyledSpan $bold="bold">{coin.name}</StyledSpan>
                           <StyledTicker>

@@ -1,6 +1,8 @@
 import { useLocation } from "react-router-dom";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 import LineChart from "./LineChart";
 import Converter from "./Converter";
@@ -152,8 +154,28 @@ const TableData = styled.td`
 `;
 
 const CoinDetails = ({ formatCoinPrice }) => {
-  const coinData = useLocation();
-  const coin = coinData.state;
+  const coinId = useLocation();
+  const coinID = coinId.state;
+
+  const [coin, setCoin] = useState();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    axios
+      .get(
+        `https://api.coingecko.com/api/v3/coins/${coinID}?tickers=true&market_data=true&community_data=false&developer_data=false&sparkline=true`
+      )
+      .then((response) => {
+        setCoin(response.data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        setLoading(false);
+      });
+  }, [coinID]);
+
+  console.log(coin);
 
   const colorizePercentageChange = (data) => {
     data = data.toFixed(2);
@@ -164,105 +186,130 @@ const CoinDetails = ({ formatCoinPrice }) => {
     }
   };
 
-  console.log(coin);
-
   return (
     <Wrapper>
-      <Crumbs>
-        <StyledCrumbLink to="/">Cryptocurrencies</StyledCrumbLink>
-        {">"}
-        <StyledCrumbSpan>{coin.name}</StyledCrumbSpan>
-      </Crumbs>
-      <CoinInfoWrapper>
-        <Rank>Rank #{coin.market_cap_rank}</Rank>
-        <ImgNameTickerWrapper>
-          <StyledCoinImg src={coin.image} />
-          <StyledName>{coin.name}</StyledName>
-          <StyledTicker>{coin.symbol.toUpperCase()}</StyledTicker>
-        </ImgNameTickerWrapper>
-        <CoinPriceWrapper>
-          <CoinPrice>${formatCoinPrice(coin.current_price)}</CoinPrice>
-          <PercentageChangeWrapper>
-            {colorizePercentageChange(coin.price_change_percentage_24h)}
-          </PercentageChangeWrapper>
-        </CoinPriceWrapper>
-      </CoinInfoWrapper>
-      <InnerWrapper>
-        <WrapperChartConverter>
-          <LineChart coin={coin} />
-          <Converter coin={coin} />
-        </WrapperChartConverter>
-        <CoinStatsWrapper>
-          <CoinStatHeader>
-            {coin.symbol.toUpperCase()} Price Statistics
-          </CoinStatHeader>
-          <CoinStats>
-            <table>
-              <TableCaption>{coin.name} Price Today</TableCaption>
-              <tbody>
-                <tr>
-                  <TableHeader>{coin.name} Price</TableHeader>
-                  <TableData>${formatCoinPrice(coin.current_price)}</TableData>
-                </tr>
-                <tr>
-                  <TableHeader>Price Change (24h)</TableHeader>
-                  <TableData>
-                    {colorizePercentageChange(coin.price_change_percentage_24h)}
-                  </TableData>
-                </tr>
-                <tr>
-                  <TableHeader>24h Low / 24h High</TableHeader>
-                  <TableData>
-                    ${coin.low_24h} / ${coin.high_24h}
-                  </TableData>
-                </tr>
-                <tr>
-                  <TableHeader>Circulating Supply</TableHeader>
-                  <TableData>
-                    {coin.circulating_supply.toLocaleString()}{" "}
-                    {coin.symbol.toUpperCase()}
-                  </TableData>
-                </tr>
-                <tr>
-                  <TableHeader>Market Cap</TableHeader>
-                  <TableData>${coin.market_cap.toLocaleString()}</TableData>
-                </tr>
-                <tr>
-                  <TableHeader>Total Volume</TableHeader>
-                  <TableData>${coin.total_volume.toLocaleString()}</TableData>
-                </tr>
-                <tr>
-                  <TableHeader>ATH</TableHeader>
-                  <TableData>${coin.ath}</TableData>
-                </tr>
-                <tr>
-                  <TableHeader>ATH Change</TableHeader>
-                  <TableData>
-                    {colorizePercentageChange(coin.ath_change_percentage)}
-                  </TableData>
-                </tr>
-                <tr>
-                  <TableHeader>ATL</TableHeader>
-                  <TableData>${coin.atl.toFixed(2)}</TableData>
-                </tr>
-                <tr>
-                  <TableHeader>ATL Change</TableHeader>
-                  <TableData>
-                    {colorizePercentageChange(coin.atl_change_percentage)}
-                  </TableData>
-                </tr>
-                <tr>
-                  <TableHeader $borderBottom="false">Market Rank</TableHeader>
-                  <TableData $borderBottom="false">
-                    #{coin.market_cap_rank}
-                  </TableData>
-                </tr>
-              </tbody>
-            </table>
-          </CoinStats>
-        </CoinStatsWrapper>
-      </InnerWrapper>
-      <TrendingCoins />
+      {loading ? (
+        <div>Loading</div>
+      ) : (
+        <>
+          <Crumbs>
+            <StyledCrumbLink to="/">Cryptocurrencies</StyledCrumbLink>
+            {">"}
+            <StyledCrumbSpan>{coin.name}</StyledCrumbSpan>
+          </Crumbs>
+          <CoinInfoWrapper>
+            <Rank>Rank #{coin.market_data.market_cap_rank}</Rank>
+            <ImgNameTickerWrapper>
+              <StyledCoinImg src={coin.image.small} />
+              <StyledName>{coin.name}</StyledName>
+              <StyledTicker>{coin.symbol.toUpperCase()}</StyledTicker>
+            </ImgNameTickerWrapper>
+            <CoinPriceWrapper>
+              <CoinPrice>
+                ${formatCoinPrice(coin.market_data.current_price.usd)}
+              </CoinPrice>
+              <PercentageChangeWrapper>
+                {colorizePercentageChange(
+                  coin.market_data.price_change_percentage_24h
+                )}
+              </PercentageChangeWrapper>
+            </CoinPriceWrapper>
+          </CoinInfoWrapper>
+          <InnerWrapper>
+            <WrapperChartConverter>
+              <LineChart coinId={coin.id} />
+              <Converter coin={coin} />
+            </WrapperChartConverter>
+            <CoinStatsWrapper>
+              <CoinStatHeader>
+                {coin.symbol.toUpperCase()} Price Statistics
+              </CoinStatHeader>
+              <CoinStats>
+                <table>
+                  <TableCaption>{coin.name} Price Today</TableCaption>
+                  <tbody>
+                    <tr>
+                      <TableHeader>{coin.name} Price</TableHeader>
+                      <TableData>
+                        ${formatCoinPrice(coin.market_data.current_price.usd)}
+                      </TableData>
+                    </tr>
+                    <tr>
+                      <TableHeader>Price Change (24h)</TableHeader>
+                      <TableData>
+                        {colorizePercentageChange(
+                          coin.market_data.price_change_percentage_24h
+                        )}
+                      </TableData>
+                    </tr>
+                    <tr>
+                      <TableHeader>24h Low / 24h High</TableHeader>
+                      <TableData>
+                        ${coin.market_data.low_24h.usd} / $
+                        {coin.market_data.high_24h.usd}
+                      </TableData>
+                    </tr>
+                    <tr>
+                      <TableHeader>Circulating Supply</TableHeader>
+                      <TableData>
+                        {coin.market_data.circulating_supply.toLocaleString()}{" "}
+                        {coin.symbol.toUpperCase()}
+                      </TableData>
+                    </tr>
+                    <tr>
+                      <TableHeader>Market Cap</TableHeader>
+                      <TableData>
+                        ${coin.market_data.market_cap.usd.toLocaleString()}
+                      </TableData>
+                    </tr>
+                    <tr>
+                      <TableHeader>Total Volume</TableHeader>
+                      <TableData>
+                        ${coin.market_data.total_volume.usd.toLocaleString()}
+                      </TableData>
+                    </tr>
+                    <tr>
+                      <TableHeader>ATH</TableHeader>
+                      <TableData>${coin.market_data.ath.usd}</TableData>
+                    </tr>
+                    <tr>
+                      <TableHeader>ATH Change</TableHeader>
+                      <TableData>
+                        {colorizePercentageChange(
+                          coin.market_data.ath_change_percentage.usd
+                        )}
+                      </TableData>
+                    </tr>
+                    <tr>
+                      <TableHeader>ATL</TableHeader>
+                      <TableData>
+                        ${coin.market_data.atl.usd.toFixed(2)}
+                      </TableData>
+                    </tr>
+                    <tr>
+                      <TableHeader>ATL Change</TableHeader>
+                      <TableData>
+                        {colorizePercentageChange(
+                          coin.market_data.atl_change_percentage.usd
+                        )}
+                      </TableData>
+                    </tr>
+                    <tr>
+                      <TableHeader $borderBottom="false">
+                        Market Rank
+                      </TableHeader>
+                      <TableData $borderBottom="false">
+                        #{coin.market_data.market_cap_rank}
+                      </TableData>
+                    </tr>
+                  </tbody>
+                </table>
+              </CoinStats>
+            </CoinStatsWrapper>
+          </InnerWrapper>
+          <TrendingCoins />
+        </>
+      )}
     </Wrapper>
   );
 };
