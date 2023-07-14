@@ -88,10 +88,10 @@ const Converter = ({ coin }) => {
 
     if (fromCoin) {
       setCoinPrice(value);
-      setUSDPrice((value * coin.market_data.current_price).toFixed(2));
+      setUSDPrice((value * coin.market_data.current_price.usd).toFixed(2));
     } else {
       setUSDPrice(value);
-      setCoinPrice((value / coin.market_data.current_price).toFixed(6));
+      setCoinPrice((value / coin.market_data.current_price.usd).toFixed(6));
     }
   };
 

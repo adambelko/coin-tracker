@@ -1,7 +1,6 @@
-import { useLocation } from "react-router-dom";
-import { Link } from "react-router-dom";
-import styled from "styled-components";
 import { useEffect, useState } from "react";
+import { useLocation, Link } from "react-router-dom";
+import styled from "styled-components";
 import axios from "axios";
 
 import LineChart from "./LineChart";
@@ -154,8 +153,8 @@ const TableData = styled.td`
 `;
 
 const CoinDetails = ({ formatCoinPrice }) => {
-  const coinId = useLocation();
-  const coinID = coinId.state;
+  const params = useLocation();
+  const coinId = params.state;
 
   const [coin, setCoin] = useState();
   const [loading, setLoading] = useState(true);
@@ -163,7 +162,7 @@ const CoinDetails = ({ formatCoinPrice }) => {
   useEffect(() => {
     axios
       .get(
-        `https://api.coingecko.com/api/v3/coins/${coinID}?tickers=true&market_data=true&community_data=false&developer_data=false&sparkline=true`
+        `https://api.coingecko.com/api/v3/coins/${coinId}?tickers=true&market_data=true&community_data=false&developer_data=false&sparkline=true`
       )
       .then((response) => {
         setCoin(response.data);
@@ -173,7 +172,7 @@ const CoinDetails = ({ formatCoinPrice }) => {
         console.log(error);
         setLoading(false);
       });
-  }, [coinID]);
+  }, [coinId]);
 
   console.log(coin);
 

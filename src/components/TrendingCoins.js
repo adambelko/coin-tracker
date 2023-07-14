@@ -8,6 +8,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   overflow: auto;
+  width: 100%;
   white-space: nowrap;
   padding: 1px;
   min-height: 215px;
@@ -24,6 +25,7 @@ const Title = styled.div`
 
 const CoinList = styled.div`
   display: flex;
+  justify-content: space-between;
   gap: 1em;
   margin-top: 0.5em;
 `;
@@ -32,7 +34,7 @@ const TrendingCoin = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1.5em;
-  width: 210px;
+  width: 200px;
   padding: 1.8em;
   border-radius: 16px;
   box-shadow: rgba(88, 102, 126, 0.08) 0px 4px 24px,
@@ -62,6 +64,11 @@ const CoinName = styled.div`
 const CoinPrice = styled.div`
   font-size: 1.1em;
   font-weight: bold;
+`;
+
+const StyledLink = styled(Link)`
+  text-decoration: none;
+  color: #000000;
 `;
 
 const TrendingCoins = () => {
@@ -105,7 +112,10 @@ const TrendingCoins = () => {
           trendingCoins.coins &&
           trendingCoins.coins.map((coin) => {
             return (
-              <Link to={"/currencies/" + coin.item.id} state={coin.item.id}>
+              <StyledLink
+                to={"/currencies/" + coin.item.id}
+                state={coin.item.id}
+              >
                 <TrendingCoin key={coin.item.id}>
                   <TopWrapper>
                     <img src={coin.item.small} alt="coin" />
@@ -128,7 +138,7 @@ const TrendingCoins = () => {
                     <SparklinesLine color="#4789f7" />
                   </Sparklines>
                 </TrendingCoin>
-              </Link>
+              </StyledLink>
             );
           })}
       </CoinList>

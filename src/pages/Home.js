@@ -294,7 +294,7 @@ const Home = ({ globalData, formatCoinPrice }) => {
                     </TableCell>
                     <TableChartCell>
                       <Sparklines data={coin.sparkline_in_7d.price}>
-                        <SparklinesLine color="blue" />
+                        <SparklinesLine color="#4789f7" />
                       </Sparklines>
                     </TableChartCell>
                   </TableRow>
