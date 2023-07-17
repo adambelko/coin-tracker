@@ -59,9 +59,6 @@ const Navigation = () => {
         <NavigationLink to="news">
           <ListItem>News</ListItem>
         </NavigationLink>
-        <NavigationLink to="portfolio">
-          <ListItem>Portfolio</ListItem>
-        </NavigationLink>
       </List>
       <SearchInput placeholder="Search..."></SearchInput>
     </NavbarContainer>

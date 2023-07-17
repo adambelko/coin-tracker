@@ -109,9 +109,6 @@ const MobileNavigation = () => {
               <NavigationLink to="news">
                 <ListItem>News</ListItem>
               </NavigationLink>
-              <NavigationLink to="portfolio">
-                <ListItem>Portfolio</ListItem>
-              </NavigationLink>
             </List>
           )}
         </NavigationRightWrapper>
