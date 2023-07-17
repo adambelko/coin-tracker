@@ -118,10 +118,7 @@ const Topbar = ({ data }) => {
           ETH Gas:<StyledValue>&nbsp;35 Gwei</StyledValue>
         </StyledElement>
       </LeftWrapper>
-      <RightWrapper>
-        <StyledElement pointer={"pointer"}>USD</StyledElement>
-        <StyledElement pointer={"pointer"}>Mode</StyledElement>
-      </RightWrapper>
+      <RightWrapper></RightWrapper>
     </TopbarWrapper>
   );
 };

@@ -1,5 +1,8 @@
 import styled from "styled-components";
+import { FiSearch } from "react-icons/fi";
+import { GrFormClose } from "react-icons/gr";
 import { NavLink } from "react-router-dom";
+import { useState } from "react";
 
 const NavbarContainer = styled.nav`
   display: flex;
@@ -35,6 +38,10 @@ const ListItem = styled.li`
 const NavigationLink = styled(NavLink)`
   text-decoration: none;
   color: ${(props) => props.theme.colors.black};
+
+  img {
+    height: 30px;
+  }
 `;
 
 const SearchInput = styled.input`
@@ -46,7 +53,39 @@ const SearchInput = styled.input`
   background-color: ${(props) => props.theme.colors.greySecondary};
 `;
 
+const SearchBoxExpanded = styled.div`
+  position: fixed;
+  z-index: 9999;
+  visibility: visible;
+  left: 0px;
+  top: 0px;
+  height: 300px;
+  width: 400px;
+  padding: 0.5em;
+  border: solid 1px black;
+  background-color: white;
+  transform: translate3d(993px, 53px, 0px);
+`;
+
+const SearchBoxInputWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  gap: 0.4em;
+  align-items: center;
+
+  input {
+    outline: none;
+    height: 2.5em;
+    width: 100%;
+    font-size: 1.1rem;
+    padding-left: 0.3em;
+    /* border: none; */
+  }
+`;
+
 const Navigation = () => {
+  const [searchBoxOpen, setSearchBoxOpen] = useState(false);
+
   return (
     <NavbarContainer>
       <List>
@@ -60,7 +99,23 @@ const Navigation = () => {
           <ListItem>News</ListItem>
         </NavigationLink>
       </List>
-      <SearchInput placeholder="Search..."></SearchInput>
+      <SearchInput
+        placeholder="Search..."
+        onClick={() => setSearchBoxOpen(true)}
+      ></SearchInput>
+      {searchBoxOpen && (
+        <SearchBoxExpanded>
+          <SearchBoxInputWrapper>
+            <FiSearch size="20px" />
+            <input placeholder="Search coin..." />
+            <GrFormClose
+              size="28px"
+              style={{ cursor: "pointer" }}
+              onClick={() => setSearchBoxOpen(false)}
+            />
+          </SearchBoxInputWrapper>
+        </SearchBoxExpanded>
+      )}
     </NavbarContainer>
   );
 };
