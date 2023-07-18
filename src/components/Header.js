@@ -22,14 +22,14 @@ const BottomWrapper = styled(TopWrapper)`
   border-bottom: 1px solid ${(props) => props.theme.colors.greySecondary};
 `;
 
-const Header = ({ globalData }) => {
+const Header = ({ globalData, trendingCoins }) => {
   return (
     <StyledHeader>
       <TopWrapper>
         <Topbar data={globalData} />
       </TopWrapper>
       <BottomWrapper>
-        <Navigation />
+        <Navigation trendingCoins={trendingCoins} />
         <MobileNavigation />
       </BottomWrapper>
     </StyledHeader>

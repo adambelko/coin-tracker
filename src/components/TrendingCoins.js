@@ -71,16 +71,8 @@ const StyledLink = styled(Link)`
   color: #000000;
 `;
 
-const TrendingCoins = () => {
-  const [trendingCoins, setTrendingCoins] = useState();
+const TrendingCoins = ({ trendingCoins }) => {
   const [coinDetails, setCoinDetails] = useState({});
-
-  useEffect(() => {
-    axios
-      .get("https://api.coingecko.com/api/v3/search/trending")
-      .then((response) => setTrendingCoins(response.data))
-      .catch((error) => console.log(error));
-  }, []);
 
   const fetchCoinDetails = (coinId) => {
     axios

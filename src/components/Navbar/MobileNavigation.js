@@ -95,7 +95,7 @@ const MobileNavigation = () => {
     <Navigation>
       <NavigationWrapper>
         <NavigationLink to="/">
-          <WebsiteName>Crypto Tracker</WebsiteName>
+          <WebsiteName>Coin Tracker</WebsiteName>
         </NavigationLink>
         <NavigationRightWrapper>
           <StyledElement>Mode</StyledElement>

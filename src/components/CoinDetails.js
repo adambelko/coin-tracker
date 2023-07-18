@@ -152,7 +152,7 @@ const TableData = styled.td`
     props.$borderBottom ? "none" : "1px solid #eff2f5"};
 `;
 
-const CoinDetails = ({ formatCoinPrice }) => {
+const CoinDetails = ({ formatCoinPrice, trendingCoins }) => {
   const params = useLocation();
   const coinId = params.state;
 
@@ -306,7 +306,7 @@ const CoinDetails = ({ formatCoinPrice }) => {
               </CoinStats>
             </CoinStatsWrapper>
           </InnerWrapper>
-          <TrendingCoins />
+          <TrendingCoins trendingCoins={trendingCoins} />
         </>
       )}
     </Wrapper>

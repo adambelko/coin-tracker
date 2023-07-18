@@ -59,10 +59,10 @@ const SearchBoxExpanded = styled.div`
   visibility: visible;
   left: 0px;
   top: 0px;
-  height: 300px;
   width: 400px;
-  padding: 0.5em;
+  padding: 0.7em;
   border: solid 1px black;
+  border-radius: 8px;
   background-color: white;
   transform: translate3d(993px, 53px, 0px);
 `;
@@ -83,14 +83,49 @@ const SearchBoxInputWrapper = styled.div`
   }
 `;
 
-const Navigation = () => {
+const SearchBoxResultsWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-top: 1.3em;
+`;
+
+const SearchBoxCategory = styled.div`
+  color: #808a9d;
+`;
+
+const SearchBoxResult = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  padding: 0.8em;
+  border-radius: 8px;
+  cursor: pointer;
+  img {
+    height: 20px;
+  }
+  &:hover {
+    background-color: #f8fafd;
+  }
+`;
+
+const SearchBoxResultCoinName = styled.div`
+  font-weight: bold;
+  color: #222531;
+`;
+
+const SearchBoxResultTicker = styled.div`
+  color: #58867e;
+`;
+
+const Navigation = ({ trendingCoins }) => {
   const [searchBoxOpen, setSearchBoxOpen] = useState(false);
 
+  console.log(trendingCoins);
   return (
     <NavbarContainer>
       <List>
         <NavigationLink to="/">
-          <WebsiteName>Crypto Tracker</WebsiteName>
+          <WebsiteName>Coin Tracker</WebsiteName>
         </NavigationLink>
         <NavigationLink to="/">
           <ListItem>Cryptocurrencies</ListItem>
@@ -114,6 +149,23 @@ const Navigation = () => {
               onClick={() => setSearchBoxOpen(false)}
             />
           </SearchBoxInputWrapper>
+          <SearchBoxResultsWrapper>
+            <SearchBoxCategory>Trending</SearchBoxCategory>
+            {trendingCoins.coins &&
+              trendingCoins.coins.map((coin) => {
+                return (
+                  <SearchBoxResult>
+                    <img src={coin.item.small} alt="" />
+                    <SearchBoxResultCoinName>
+                      {coin.item.name}
+                    </SearchBoxResultCoinName>
+                    <SearchBoxResultTicker>
+                      {coin.item.symbol}
+                    </SearchBoxResultTicker>
+                  </SearchBoxResult>
+                );
+              })}
+          </SearchBoxResultsWrapper>
         </SearchBoxExpanded>
       )}
     </NavbarContainer>

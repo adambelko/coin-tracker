@@ -16,6 +16,7 @@ const StyledRoot = styled.div`
 
 function App() {
   const [globalData, setGlobalData] = useState([]);
+  const [trendingCoins, setTrendingCoins] = useState();
 
   const globalAPI = "https://api.coingecko.com/api/v3/global";
 
@@ -33,10 +34,21 @@ function App() {
       .catch((error) => console.log(error));
   }, []);
 
+  useEffect(() => {
+    axios
+      .get("https://api.coingecko.com/api/v3/search/trending")
+      .then((response) => setTrendingCoins(response.data))
+      .catch((error) => console.log(error));
+  }, []);
+
   return (
     <StyledRoot>
-      <Header globalData={globalData} />
-      <Main globalData={globalData} formatCoinPrice={formatCoinPrice} />
+      <Header globalData={globalData} trendingCoins={trendingCoins} />
+      <Main
+        globalData={globalData}
+        trendingCoins={trendingCoins}
+        formatCoinPrice={formatCoinPrice}
+      />
       <Footer />
     </StyledRoot>
   );

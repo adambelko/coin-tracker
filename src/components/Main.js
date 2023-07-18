@@ -12,7 +12,7 @@ const StyledMain = styled.main`
   flex-grow: 1;
 `;
 
-const Main = ({ globalData, formatCoinPrice }) => {
+const Main = ({ globalData, trendingCoins, formatCoinPrice }) => {
   return (
     <StyledMain>
       <ScrollToTop smooth />
@@ -26,7 +26,12 @@ const Main = ({ globalData, formatCoinPrice }) => {
         <Route path="/news" element={<News />} />
         <Route
           path="/currencies/:id"
-          element={<CoinDetails formatCoinPrice={formatCoinPrice} />}
+          element={
+            <CoinDetails
+              formatCoinPrice={formatCoinPrice}
+              trendingCoins={trendingCoins}
+            />
+          }
         ></Route>
       </Routes>
     </StyledMain>
