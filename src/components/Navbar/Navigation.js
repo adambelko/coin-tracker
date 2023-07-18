@@ -1,8 +1,9 @@
 import styled from "styled-components";
 import { FiSearch } from "react-icons/fi";
 import { GrFormClose } from "react-icons/gr";
-import { NavLink } from "react-router-dom";
-import { useState } from "react";
+import { NavLink, Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 const NavbarContainer = styled.nav`
   display: flex;
@@ -49,22 +50,27 @@ const SearchInput = styled.input`
   padding: 0.9em;
   border: none;
   border-radius: 8px;
-  cursor: pointer;
   background-color: ${(props) => props.theme.colors.greySecondary};
+  position: relative;
+  cursor: pointer;
 `;
 
 const SearchBoxExpanded = styled.div`
-  position: fixed;
+  position: absolute;
   z-index: 9999;
   visibility: visible;
   left: 0px;
   top: 0px;
   width: 400px;
+  max-height: 374px;
+  overflow-y: auto;
   padding: 0.7em;
-  border: solid 1px black;
+  border: none;
   border-radius: 8px;
   background-color: white;
   transform: translate3d(993px, 53px, 0px);
+  box-shadow: 0px 1px 2px rgba(128, 138, 157, 0.12),
+    0px 8px 32px rgba(128, 138, 157, 0.24);
 `;
 
 const SearchBoxInputWrapper = styled.div`
@@ -79,7 +85,7 @@ const SearchBoxInputWrapper = styled.div`
     width: 100%;
     font-size: 1.1rem;
     padding-left: 0.3em;
-    /* border: none; */
+    border: none;
   }
 `;
 
@@ -117,10 +123,28 @@ const SearchBoxResultTicker = styled.div`
   color: #58867e;
 `;
 
+const StyledLink = styled(Link)`
+  text-decoration: none;
+`;
+
 const Navigation = ({ trendingCoins }) => {
   const [searchBoxOpen, setSearchBoxOpen] = useState(false);
+  const [searchValue, setSearchValue] = useState(null);
+  const [searchResult, setSearchResult] = useState([]);
 
-  console.log(trendingCoins);
+  useEffect(() => {
+    axios
+      .get(`https://api.coingecko.com/api/v3/search?query=${searchValue}`)
+      .then((response) => setSearchResult(response.data))
+      .catch((error) => console.log(error));
+  }, [searchValue]);
+
+  const handleCloseSearchBox = () => {
+    setSearchValue(null);
+    setSearchBoxOpen(false);
+  };
+
+  console.log(searchValue);
   return (
     <NavbarContainer>
       <List>
@@ -142,29 +166,63 @@ const Navigation = ({ trendingCoins }) => {
         <SearchBoxExpanded>
           <SearchBoxInputWrapper>
             <FiSearch size="20px" />
-            <input placeholder="Search coin..." />
+            <input
+              value={searchValue}
+              placeholder="Search coin..."
+              onChange={(e) => setSearchValue(e.target.value)}
+            />
             <GrFormClose
               size="28px"
               style={{ cursor: "pointer" }}
-              onClick={() => setSearchBoxOpen(false)}
+              onClick={handleCloseSearchBox}
             />
           </SearchBoxInputWrapper>
           <SearchBoxResultsWrapper>
-            <SearchBoxCategory>Trending</SearchBoxCategory>
-            {trendingCoins.coins &&
-              trendingCoins.coins.map((coin) => {
-                return (
-                  <SearchBoxResult>
-                    <img src={coin.item.small} alt="" />
-                    <SearchBoxResultCoinName>
-                      {coin.item.name}
-                    </SearchBoxResultCoinName>
-                    <SearchBoxResultTicker>
-                      {coin.item.symbol}
-                    </SearchBoxResultTicker>
-                  </SearchBoxResult>
-                );
-              })}
+            {searchValue === null ? (
+              <React.Fragment>
+                <SearchBoxCategory>Trending</SearchBoxCategory>
+                {trendingCoins.coins &&
+                  trendingCoins.coins.map((coin) => (
+                    <StyledLink
+                      to={"/currencies/" + coin.item.id}
+                      state={coin.item.id}
+                      onClick={() => setSearchBoxOpen(false)}
+                    >
+                      <SearchBoxResult>
+                        <img src={coin.item.small} alt="" />
+                        <SearchBoxResultCoinName>
+                          {coin.item.name}
+                        </SearchBoxResultCoinName>
+                        <SearchBoxResultTicker>
+                          {coin.item.symbol}
+                        </SearchBoxResultTicker>
+                      </SearchBoxResult>
+                    </StyledLink>
+                  ))}
+              </React.Fragment>
+            ) : (
+              <React.Fragment>
+                <SearchBoxCategory>Cryptoassets</SearchBoxCategory>
+                {searchResult &&
+                  searchResult.coins.map((coin) => (
+                    <StyledLink
+                      to={"/currencies/" + coin.id}
+                      state={coin.id}
+                      onClick={() => setSearchBoxOpen(false)}
+                    >
+                      <SearchBoxResult>
+                        <img src={coin.thumb} alt="" />
+                        <SearchBoxResultCoinName>
+                          {coin.name}
+                        </SearchBoxResultCoinName>
+                        <SearchBoxResultTicker>
+                          {coin.symbol}
+                        </SearchBoxResultTicker>
+                      </SearchBoxResult>
+                    </StyledLink>
+                  ))}
+              </React.Fragment>
+            )}
           </SearchBoxResultsWrapper>
         </SearchBoxExpanded>
       )}

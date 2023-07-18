@@ -18,8 +18,6 @@ function App() {
   const [globalData, setGlobalData] = useState([]);
   const [trendingCoins, setTrendingCoins] = useState();
 
-  const globalAPI = "https://api.coingecko.com/api/v3/global";
-
   const formatCoinPrice = (price) => {
     return price.toLocaleString(undefined, {
       minimumFractionDigits: 2,
@@ -29,7 +27,7 @@ function App() {
 
   useEffect(() => {
     axios
-      .get(globalAPI)
+      .get("https://api.coingecko.com/api/v3/global")
       .then((response) => setGlobalData(response.data.data))
       .catch((error) => console.log(error));
   }, []);
