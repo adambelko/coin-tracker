@@ -146,7 +146,6 @@ const Navigation = ({ trendingCoins }) => {
     setSearchBoxOpen(false);
   };
 
-  console.log(searchValue);
   return (
     <NavbarContainer>
       <List>
@@ -189,7 +188,7 @@ const Navigation = ({ trendingCoins }) => {
                       <StyledLink
                         to={"/currencies/" + coin.item.id}
                         state={coin.item.id}
-                        onClick={() => setSearchBoxOpen(false)}
+                        onClick={handleCloseSearchBox}
                       >
                         <SearchBoxResult>
                           <img src={coin.item.small} alt="" />
@@ -211,7 +210,7 @@ const Navigation = ({ trendingCoins }) => {
                       <StyledLink
                         to={"/currencies/" + coin.id}
                         state={coin.id}
-                        onClick={() => setSearchBoxOpen(false)}
+                        onClick={handleCloseSearchBox}
                       >
                         <SearchBoxResult>
                           <img src={coin.thumb} alt="" />
